@@ -5,4 +5,5 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <include file="/db/changelog/changes/create-table-user.sql"/>
     <include file="/db/changelog/changes/insert-users.sql"/>
+    <include file="/db/changelog/changes/insert-columns-user-table.sql"/>
 </databaseChangeLog>
