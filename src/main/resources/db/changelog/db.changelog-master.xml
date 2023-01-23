@@ -3,7 +3,9 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <include file="/db/changelog/changes/create-table-user.sql"/>
-    <include file="/db/changelog/changes/insert-users.sql"/>
-    <include file="/db/changelog/changes/insert-columns-user-table.sql"/>
+    <include file="/db/changelog/changes/001-create-table-user.sql"/>
+    <include file="/db/changelog/changes/002-insert-users.sql"/>
+    <include file="/db/changelog/changes/003-insert-columns-user-table.sql"/>
+    <include file="/db/changelog/changes/004-create-table-kl_authority.sql"/>
+    <include file="/db/changelog/changes/005-create-table-kl_user_authority.sql"/>
 </databaseChangeLog>
