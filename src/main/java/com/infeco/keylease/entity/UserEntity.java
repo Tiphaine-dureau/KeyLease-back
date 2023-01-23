@@ -1,12 +1,15 @@
 package com.infeco.keylease.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "kl_user")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -22,13 +25,23 @@ public class User {
     public String email;
 
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     public String password;
 
 
-    public User() {
+    @ManyToMany
+    @JoinTable(
+            name = "kl_user_authority",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_name", referencedColumnName = "name")
+    )
+    private Set<AuthorityEntity> authorities = new HashSet<>();
+
+
+    public UserEntity() {
     }
 
-    public User(UUID id, String lastName, String firstName, String email, String password) {
+    public UserEntity(UUID id, String lastName, String firstName, String email, String password) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -74,5 +87,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<AuthorityEntity> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<AuthorityEntity> authorities) {
+        this.authorities = authorities;
     }
 }

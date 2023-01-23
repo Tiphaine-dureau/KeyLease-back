@@ -1,6 +1,6 @@
 package com.infeco.keylease.service;
 
-import com.infeco.keylease.entity.User;
+import com.infeco.keylease.entity.UserEntity;
 import com.infeco.keylease.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers(){
+    public List<UserEntity> getUsers(){
         return this.userRepository.findAll();
     }
 }

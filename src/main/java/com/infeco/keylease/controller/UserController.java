@@ -1,6 +1,6 @@
 package com.infeco.keylease.controller;
 
-import com.infeco.keylease.entity.User;
+import com.infeco.keylease.entity.UserEntity;
 import com.infeco.keylease.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +17,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<User> getUsers() {
+    public List<UserEntity> getUsers() {
         return this.userService.getUsers();
     }
 
