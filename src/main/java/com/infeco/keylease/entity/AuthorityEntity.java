@@ -14,7 +14,7 @@ public class AuthorityEntity implements GrantedAuthority {
 
     @Id
     @NotNull
-    @Size(max=50)
+    @Size(max = 50)
     @Column(length = 50)
     private String name;
 
@@ -39,13 +39,13 @@ public class AuthorityEntity implements GrantedAuthority {
 
     @Override
     public boolean equals(Object obj) {
-       if (this == obj){
-           return true;
-       }
-       if (!(obj instanceof AuthorityEntity)){
-           return false;
-       }
-       return Objects.equals(name,((AuthorityEntity)obj).name);
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof AuthorityEntity)) {
+            return false;
+        }
+        return Objects.equals(name, ((AuthorityEntity) obj).name);
     }
 
     @Override

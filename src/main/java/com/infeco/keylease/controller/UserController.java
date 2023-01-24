@@ -1,7 +1,9 @@
 package com.infeco.keylease.controller;
 
-import com.infeco.keylease.entity.UserEntity;
+import com.infeco.keylease.models.User;
+import com.infeco.keylease.security.AuthoritiesConstants;
 import com.infeco.keylease.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +19,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public List<UserEntity> getUsers() {
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.ADMIN + "')")
+    public List<User> getUsers() {
         return this.userService.getUsers();
     }
-
 }
