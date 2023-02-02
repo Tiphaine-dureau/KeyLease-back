@@ -18,18 +18,17 @@ public class UserEntity implements UserDetails {
     private UUID id;
 
     @Column(name = "last_name", nullable = false)
-    public String lastName;
+    private String lastName;
 
     @Column(name = "first_name", nullable = false)
-    public String firstName;
+    private String firstName;
 
     @Column(name = "email", nullable = false)
-    public String email;
+    private String email;
 
     @Column(name = "password", nullable = false)
     @JsonIgnore
-    public String password;
-
+    private String password;
 
     @ManyToMany
     @JoinTable(
@@ -39,12 +38,10 @@ public class UserEntity implements UserDetails {
     )
     private Set<AuthorityEntity> authorities = new HashSet<>();
 
-
     public UserEntity() {
     }
 
-    public UserEntity(UUID id, String lastName, String firstName, String email, String password) {
-        this.id = id;
+    public UserEntity(String lastName, String firstName, String email, String password) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.email = email;
