@@ -11,6 +11,14 @@ Nomenclature :
 - Security : en cas de vulnérabilités
 - Numéro de version : major.minor.patch
 
+### [0.0.5] - 2023-02-02
+
+#### Added
+
+- Feature client : ClientEntity + repository + service + controller : /GET clients
+- AddressEntity + repository
+- Create table address and client with fk
+
 ### [0.0.4] - 2023-01-24
 
 #### Added
