@@ -1,12 +1,13 @@
 package com.infeco.keylease.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "kl_client")
+@Table(name = "client")
 public class ClientEntity {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -30,18 +31,10 @@ public class ClientEntity {
 
     @OneToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JsonManagedReference
     private AddressEntity address;
 
     public ClientEntity() {
-    }
-
-    public ClientEntity(String lastName, String firstName, LocalDate birthday, String phoneNumber, String email, AddressEntity address) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.birthday = birthday;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
     }
 
     public UUID getId() {

@@ -8,4 +8,6 @@
     <include file="/db/changelog/changes/003-insert-columns-user-table.sql"/>
     <include file="/db/changelog/changes/004-create-table-kl_authority.sql"/>
     <include file="/db/changelog/changes/005-create-table-kl_user_authority.sql"/>
+    <include file="/db/changelog/changes/006-create-table-address.sql"/>
+    <include file="/db/changelog/changes/007-create-table-client.sql"/>
 </databaseChangeLog>
