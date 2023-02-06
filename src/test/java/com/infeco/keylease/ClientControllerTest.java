@@ -19,17 +19,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 public class ClientControllerTest {
-
-    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IlRhdGEiLCJpYXQiOjE1MTYyMzkwMjJ9.4iyAH-1x4gDpnY0HySORM_YNlTLk2Ra2iGxU_b33Qbo";
-
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.USER)
-    public void testGetUsersWithValidTokenAndUserRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/clients")
-                        .header("Authorization", "Bearer" + VALID_TOKEN))
+    public void testGetUsersWithUserRole() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/clients"))
                 .andExpect(status().isOk());
     }
 }

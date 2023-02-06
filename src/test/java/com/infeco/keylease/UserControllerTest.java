@@ -20,24 +20,20 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
 class UserControllerTest {
-
-    private static final String VALID_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-    public void testGetClientsWithValidTokenAndRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/users")
-                        .header("Authorization", "Bearer" + VALID_TOKEN))
+    public void testGetClientsWithValidRole() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.USER)
     public void testGetClientsWithInvalidRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/users")
-                        .header("Authorization", "Bearer" + VALID_TOKEN))
+        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isForbidden());
     }
 }
