@@ -1,6 +1,7 @@
 package com.infeco.keylease;
 
 import com.infeco.keylease.entity.ClientEntity;
+import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.repository.ClientRepository;
 import com.infeco.keylease.service.ClientService;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class ClientServiceTest {
 
     @Test
     public void testGetClients(){
-        ClientEntity clientEntity = new ClientEntity();
+        ClientEntity clientEntity = new TenantEntity();
         clientEntity.setFirstName("Firstname");
         List<ClientEntity> clients = List.of(clientEntity);
         given(clientRepository.findAll()).willReturn(clients);

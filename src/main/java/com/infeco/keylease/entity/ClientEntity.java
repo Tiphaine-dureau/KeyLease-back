@@ -8,7 +8,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "client")
-public class ClientEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "client_type")
+public abstract class ClientEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id", updatable = false, nullable = false)
