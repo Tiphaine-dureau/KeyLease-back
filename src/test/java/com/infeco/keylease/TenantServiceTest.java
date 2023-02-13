@@ -1,6 +1,9 @@
 package com.infeco.keylease;
 
+import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.TenantEntity;
+import com.infeco.keylease.models.Address;
+import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.TenantRepository;
 import com.infeco.keylease.service.TenantService;
 import org.junit.jupiter.api.Test;
@@ -12,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -28,16 +31,24 @@ public class TenantServiceTest {
     TenantService tenantService;
 
     @Test
-    public void testGetTenant(){
+    public void testGetTenants() {
+        Tenant tenant = new Tenant();
+        tenant.setFirstName("my first name");
+        Address address = new Address();
+        address.setStreet("my street");
+        tenant.setPartnerFirstName("PartnerFirstName");
+        tenant.setAddress(address);
         TenantEntity tenantEntity = new TenantEntity();
+        tenantEntity.setFirstName("my first name");
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("my street");
         tenantEntity.setPartnerFirstName("PartnerFirstName");
-        tenantEntity.setPartnerLastName("PartnerLastName");
-        tenantEntity.setFirstName("Firstname");
-        tenantEntity.setEmail("email@test.com");
-        List<TenantEntity> tenants = List.of(tenantEntity);
-        given(tenantRepository.findAll()).willReturn(tenants);
-        List<TenantEntity> expected = tenantService.getTenants();
-        assertEquals(expected, tenants);
+        tenantEntity.setAddress(addressEntity);
+        List<Tenant> tenants = List.of(tenant);
+        List<TenantEntity> tenantEntities = List.of(tenantEntity);
+        given(tenantRepository.findAll()).willReturn(tenantEntities);
+        List<Tenant> expected = tenantService.getTenants();
+        assert (expected.get(0).getPartnerFirstName()).equals(tenants.get(0).getPartnerFirstName());
         verify(tenantRepository).findAll();
     }
 }

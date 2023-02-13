@@ -11,6 +11,7 @@ public class Tenant extends Client {
     }
 
     public Tenant(TenantEntity tenantEntity) {
+        super(tenantEntity);
         this.partnerLastName = tenantEntity.getPartnerLastName();
         this.partnerFirstName = tenantEntity.getPartnerFirstName();
         this.partnerPhoneNumber = tenantEntity.getPartnerPhoneNumber();
