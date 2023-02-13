@@ -1,6 +1,6 @@
 package com.infeco.keylease.controller;
 
-import com.infeco.keylease.entity.TenantEntity;
+import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.security.AuthoritiesConstants;
 import com.infeco.keylease.service.TenantService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +20,14 @@ public class TenantController {
 
     @GetMapping("/tenants")
     @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
-    public List<TenantEntity> getTenants() {
+    public List<Tenant> getTenants() {
         return this.tenantService.getTenants();
     }
+/*
+    @PostMapping("/tenants")
+    public void createTenant(
+            @RequestBody AuthenticationRequest request
+    ){
+        tenantService.createTenant(t);
+    }*/
 }
