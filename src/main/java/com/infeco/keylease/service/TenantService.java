@@ -1,6 +1,5 @@
 package com.infeco.keylease.service;
 
-import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
@@ -21,4 +20,7 @@ public class TenantService {
         return this.tenantRepository.findAll().stream().map(Tenant::new).collect(Collectors.toList());
     }
 
+    public Tenant addTenant(Tenant tenant) {
+        return new Tenant();
+    }
 }

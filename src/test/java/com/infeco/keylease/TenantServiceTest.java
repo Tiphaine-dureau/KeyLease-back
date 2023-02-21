@@ -4,18 +4,24 @@ import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Tenant;
+import com.infeco.keylease.repository.AddressRepository;
 import com.infeco.keylease.repository.TenantRepository;
 import com.infeco.keylease.service.TenantService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -29,6 +35,8 @@ public class TenantServiceTest {
 
     @InjectMocks
     TenantService tenantService;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Test
     public void testGetTenants() {
@@ -50,5 +58,20 @@ public class TenantServiceTest {
         List<Tenant> expected = tenantService.getTenants();
         assert (expected.get(0).getPartnerFirstName()).equals(tenants.get(0).getPartnerFirstName());
         verify(tenantRepository).findAll();
+    }
+
+    @Test
+    public void testAddTenant() {
+        // Given
+        Tenant tenant = new Tenant();
+        tenant.setFirstName("John");
+        TenantEntity tenantEntity = new TenantEntity();
+        tenantEntity.setFirstName("John");
+        Mockito.when(tenantRepository.save(any(TenantEntity.class))).thenReturn(tenantEntity);
+        // When
+        Tenant savedTenant = tenantService.addTenant(tenant);
+        // Then
+        assertNotNull(savedTenant);
+        assertEquals("John", savedTenant.getFirstName());
     }
 }
