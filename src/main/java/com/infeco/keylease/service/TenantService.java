@@ -1,5 +1,6 @@
 package com.infeco.keylease.service;
 
+import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ public class TenantService {
     }
 
     public Tenant addTenant(Tenant tenant) {
-        return new Tenant();
+        TenantEntity tenantEntity = new TenantEntity();
+        tenantEntity.setFirstName(tenant.getFirstName());
+        TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
+        Tenant savedTenant = new Tenant();
+        savedTenant.setFirstName(savedTenantEntity.getFirstName());
+        return savedTenant;
     }
 }
