@@ -24,9 +24,21 @@ public class TenantService {
     public Tenant addTenant(Tenant tenant) {
         TenantEntity tenantEntity = new TenantEntity();
         tenantEntity.setFirstName(tenant.getFirstName());
+        tenantEntity.setLastName(tenant.getLastName());
+        tenantEntity.setEmail(tenant.getEmail());
+        tenantEntity.setPhoneNumber(tenant.getPhoneNumber());
+        tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());
+        tenantEntity.setPartnerLastName(tenant.getPartnerLastName());
+        tenantEntity.setPartnerPhoneNumber(tenant.getPartnerPhoneNumber());
         TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
         Tenant savedTenant = new Tenant();
         savedTenant.setFirstName(savedTenantEntity.getFirstName());
+        savedTenant.setLastName(savedTenantEntity.getLastName());
+        savedTenant.setEmail(savedTenantEntity.getEmail());
+        savedTenant.setPhoneNumber(savedTenantEntity.getPhoneNumber());
+        savedTenant.setPartnerFirstName(savedTenantEntity.getPartnerFirstName());
+        savedTenant.setPartnerLastName(savedTenantEntity.getPartnerLastName());
+        savedTenant.setPartnerPhoneNumber(savedTenantEntity.getPartnerPhoneNumber());
         return savedTenant;
     }
 }
