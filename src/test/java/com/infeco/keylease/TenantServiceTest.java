@@ -65,13 +65,33 @@ public class TenantServiceTest {
         // Given
         Tenant tenant = new Tenant();
         tenant.setFirstName("John");
+        tenant.setLastName("Doe");
+        tenant.setEmail("john.doe@example.com");
+        tenant.setPhoneNumber("0987654321");
+        tenant.setPartnerFirstName("Jane");
+        tenant.setPartnerLastName("Doe");
+        tenant.setPartnerPhoneNumber("1234567890");
+
         TenantEntity tenantEntity = new TenantEntity();
         tenantEntity.setFirstName("John");
+        tenantEntity.setLastName("Doe");
+        tenantEntity.setEmail("john.doe@example.com");
+        tenantEntity.setPhoneNumber("0987654321");
+        tenantEntity.setPartnerFirstName("Jane");
+        tenantEntity.setPartnerLastName("Doe");
+        tenantEntity.setPartnerPhoneNumber("1234567890");
         Mockito.when(tenantRepository.save(any(TenantEntity.class))).thenReturn(tenantEntity);
         // When
         Tenant savedTenant = tenantService.addTenant(tenant);
         // Then
         assertNotNull(savedTenant);
         assertEquals("John", savedTenant.getFirstName());
+        assertEquals("Doe", savedTenant.getLastName());
+        assertEquals("john.doe@example.com", savedTenant.getEmail());
+        assertEquals("0987654321", savedTenant.getPhoneNumber());
+        assertEquals("Jane", savedTenant.getPartnerFirstName());
+        assertEquals("Doe", savedTenant.getPartnerLastName());
+        assertEquals("1234567890", savedTenant.getPartnerPhoneNumber());
+
     }
 }
