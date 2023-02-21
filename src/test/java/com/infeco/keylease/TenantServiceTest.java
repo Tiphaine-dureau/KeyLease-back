@@ -35,8 +35,6 @@ public class TenantServiceTest {
 
     @InjectMocks
     TenantService tenantService;
-    @Autowired
-    private AddressRepository addressRepository;
 
     @Test
     public void testGetTenants() {
@@ -80,7 +78,24 @@ public class TenantServiceTest {
         tenantEntity.setPartnerFirstName("Jane");
         tenantEntity.setPartnerLastName("Doe");
         tenantEntity.setPartnerPhoneNumber("1234567890");
+
+
+        Address address = new Address();
+        tenant.setAddress(address);
+        address.setStreet("1 rue des mimosas");
+        address.setAdditionalAddress("Bâtiment 1 apt 22");
+        address.setZipCode("33000");
+        address.setTown("Bordeaux");
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("1 rue des mimosas");
+        addressEntity.setAdditionalAddress("Bâtiment 1 apt 22");
+        addressEntity.setZipCode("33000");
+        addressEntity.setTown("Bordeaux");
+        tenantEntity.setAddress(addressEntity);
+
         Mockito.when(tenantRepository.save(any(TenantEntity.class))).thenReturn(tenantEntity);
+
         // When
         Tenant savedTenant = tenantService.addTenant(tenant);
         // Then
@@ -92,6 +107,12 @@ public class TenantServiceTest {
         assertEquals("Jane", savedTenant.getPartnerFirstName());
         assertEquals("Doe", savedTenant.getPartnerLastName());
         assertEquals("1234567890", savedTenant.getPartnerPhoneNumber());
+
+        assertNotNull(savedTenant.getAddress());
+        assertEquals("1 rue des mimosas", savedTenant.getAddress().getStreet());
+        assertEquals("Bâtiment 1 apt 22", savedTenant.getAddress().getAdditionalAddress());
+        assertEquals("33000", savedTenant.getAddress().getZipCode());
+        assertEquals("Bordeaux", savedTenant.getAddress().getTown());
 
     }
 }
