@@ -11,6 +11,16 @@ Nomenclature :
 - Security : en cas de vulnérabilités
 - Numéro de version : major.minor.patch
 
+### Unreleased
+
+### [0.0.6] - 2023-02-22
+
+#### Added
+
+- models for AddressEntity - Client-Entity - TenantEntity 
+- /GET tenants
+- /POST tenant (TDD)
+
 ### [0.0.5] - 2023-02-02
 
 #### Added
