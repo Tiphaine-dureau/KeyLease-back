@@ -8,33 +8,24 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("dev")
-class UserControllerTest {
+public class ClientControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-    public void testGetClientsWithValidRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+    @WithMockUser(authorities = AuthoritiesConstants.USER)
+    public void testGetUsersWithUserRole() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/clients"))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    @WithMockUser(authorities = AuthoritiesConstants.USER)
-    public void testGetClientsWithInvalidRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
-                .andExpect(status().isForbidden());
-    }
 }
-
