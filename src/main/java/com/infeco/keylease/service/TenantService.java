@@ -4,6 +4,7 @@ import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Tenant;
+import com.infeco.keylease.repository.AddressRepository;
 import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class TenantService {
 
     private final TenantRepository tenantRepository;
+    private final AddressRepository addressRepository;
 
-    public TenantService(TenantRepository tenantRepository) {
+    public TenantService(TenantRepository tenantRepository, AddressRepository addressRepository) {
         this.tenantRepository = tenantRepository;
+        this.addressRepository = addressRepository;
     }
 
     public List<Tenant> getTenants() {
@@ -24,6 +27,12 @@ public class TenantService {
     }
 
     public Tenant addTenant(Tenant tenant) {
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet(tenant.getAddress().getStreet());
+        addressEntity.setAdditionalAddress(tenant.getAddress().getAdditionalAddress());
+        addressEntity.setZipCode(tenant.getAddress().getZipCode());
+        addressEntity.setTown(tenant.getAddress().getTown());
+        AddressEntity savedAddressEntity = this.addressRepository.save(addressEntity);
         TenantEntity tenantEntity = new TenantEntity();
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
@@ -32,14 +41,8 @@ public class TenantService {
         tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());
         tenantEntity.setPartnerLastName(tenant.getPartnerLastName());
         tenantEntity.setPartnerPhoneNumber(tenant.getPartnerPhoneNumber());
-        AddressEntity addressEntity = new AddressEntity();
-        addressEntity.setStreet(tenant.getAddress().getStreet());
-        addressEntity.setAdditionalAddress(tenant.getAddress().getAdditionalAddress());
-        addressEntity.setZipCode(tenant.getAddress().getZipCode());
-        addressEntity.setTown(tenant.getAddress().getTown());
-        tenantEntity.setAddress(addressEntity);
+        tenantEntity.setAddress(savedAddressEntity);
         TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
-
 
         Tenant savedTenant = new Tenant();
         savedTenant.setFirstName(savedTenantEntity.getFirstName());

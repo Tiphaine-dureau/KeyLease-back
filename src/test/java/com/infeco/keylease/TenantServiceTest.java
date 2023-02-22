@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -32,6 +31,9 @@ public class TenantServiceTest {
 
     @Mock
     private TenantRepository tenantRepository;
+
+    @Mock
+    private AddressRepository addressRepository;
 
     @InjectMocks
     TenantService tenantService;
@@ -95,6 +97,7 @@ public class TenantServiceTest {
         tenantEntity.setAddress(addressEntity);
 
         Mockito.when(tenantRepository.save(any(TenantEntity.class))).thenReturn(tenantEntity);
+        Mockito.when(addressRepository.save(any(AddressEntity.class))).thenReturn(addressEntity);
 
         // When
         Tenant savedTenant = tenantService.addTenant(tenant);
