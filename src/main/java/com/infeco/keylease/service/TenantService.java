@@ -2,6 +2,7 @@ package com.infeco.keylease.service;
 
 import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.TenantEntity;
+import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.AddressRepository;
@@ -9,6 +10,7 @@ import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -28,19 +30,30 @@ public class TenantService {
     }
 
     public Tenant addTenant(Tenant tenant) {
-        AddressEntity addressEntity = addressToEntity(tenant.getAddress(), new AddressEntity());
+        AddressEntity addressEntity = new AddressEntity();
+        addressToEntity(tenant.getAddress(), addressEntity);
         AddressEntity savedAddressEntity = this.addressRepository.save(addressEntity);
-        TenantEntity tenantEntity = tenantToEntity(tenant, new TenantEntity());
+        TenantEntity tenantEntity = new TenantEntity();
+        tenantToEntity(tenant, tenantEntity);
         tenantEntity.setAddress(savedAddressEntity);
         TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
         return entityToTenant(savedTenantEntity);
     }
 
-    public Tenant modifyTenant(Tenant tenant, UUID id) {
-        return new Tenant();
+    public Tenant modifyTenant(Tenant tenant, UUID id) throws NotFoundEntity {
+        Optional<TenantEntity> optionalTenantEntity = this.tenantRepository.findById(id);
+        if (optionalTenantEntity.isPresent()) {
+            TenantEntity tenantEntity = optionalTenantEntity.get();
+            tenantToEntity(tenant, tenantEntity);
+            addressToEntity(tenant.getAddress(), tenantEntity.getAddress());
+            TenantEntity savedEntity = this.tenantRepository.save(tenantEntity);
+            return entityToTenant(savedEntity);
+        } else {
+            throw new NotFoundEntity();
+        }
     }
 
-    private TenantEntity tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
+    private void tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
         tenantEntity.setEmail(tenant.getEmail());
@@ -48,15 +61,13 @@ public class TenantService {
         tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());
         tenantEntity.setPartnerLastName(tenant.getPartnerLastName());
         tenantEntity.setPartnerPhoneNumber(tenant.getPartnerPhoneNumber());
-        return tenantEntity;
     }
 
-    private AddressEntity addressToEntity(Address address, AddressEntity addressEntity) {
+    private void addressToEntity(Address address, AddressEntity addressEntity) {
         addressEntity.setStreet(address.getStreet());
         addressEntity.setAdditionalAddress(address.getAdditionalAddress());
         addressEntity.setZipCode(address.getZipCode());
         addressEntity.setTown(address.getTown());
-        return addressEntity;
     }
 
     private Tenant entityToTenant(TenantEntity tenantEntity) {
