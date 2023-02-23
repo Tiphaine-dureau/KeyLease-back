@@ -15,6 +15,7 @@ Nomenclature :
 
 ### Added
 
+- GET /tenants/:id 
 - PUT /tenants with Bad Request Exception
 
 ### [0.0.6] - 2023-02-22

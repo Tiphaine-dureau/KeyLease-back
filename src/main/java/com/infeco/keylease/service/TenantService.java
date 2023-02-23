@@ -53,6 +53,15 @@ public class TenantService {
         }
     }
 
+    public Tenant getTenantById(UUID id) throws NotFoundEntity {
+        Optional<TenantEntity> optionalTenantEntity = this.tenantRepository.findById(id);
+        if (optionalTenantEntity.isPresent()) {
+            return entityToTenant(optionalTenantEntity.get());
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
+
     private void tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
