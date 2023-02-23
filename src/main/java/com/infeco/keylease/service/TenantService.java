@@ -9,6 +9,7 @@ import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,13 +28,19 @@ public class TenantService {
     }
 
     public Tenant addTenant(Tenant tenant) {
-        AddressEntity addressEntity = new AddressEntity();
-        addressEntity.setStreet(tenant.getAddress().getStreet());
-        addressEntity.setAdditionalAddress(tenant.getAddress().getAdditionalAddress());
-        addressEntity.setZipCode(tenant.getAddress().getZipCode());
-        addressEntity.setTown(tenant.getAddress().getTown());
+        AddressEntity addressEntity = addressToEntity(tenant.getAddress(), new AddressEntity());
         AddressEntity savedAddressEntity = this.addressRepository.save(addressEntity);
-        TenantEntity tenantEntity = new TenantEntity();
+        TenantEntity tenantEntity = tenantToEntity(tenant, new TenantEntity());
+        tenantEntity.setAddress(savedAddressEntity);
+        TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
+        return entityToTenant(savedTenantEntity);
+    }
+
+    public Tenant modifyTenant(Tenant tenant, UUID id) {
+        return new Tenant();
+    }
+
+    private TenantEntity tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
         tenantEntity.setEmail(tenant.getEmail());
@@ -41,23 +48,33 @@ public class TenantService {
         tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());
         tenantEntity.setPartnerLastName(tenant.getPartnerLastName());
         tenantEntity.setPartnerPhoneNumber(tenant.getPartnerPhoneNumber());
-        tenantEntity.setAddress(savedAddressEntity);
-        TenantEntity savedTenantEntity = this.tenantRepository.save(tenantEntity);
+        return tenantEntity;
+    }
 
-        Tenant savedTenant = new Tenant();
-        savedTenant.setFirstName(savedTenantEntity.getFirstName());
-        savedTenant.setLastName(savedTenantEntity.getLastName());
-        savedTenant.setEmail(savedTenantEntity.getEmail());
-        savedTenant.setPhoneNumber(savedTenantEntity.getPhoneNumber());
-        savedTenant.setPartnerFirstName(savedTenantEntity.getPartnerFirstName());
-        savedTenant.setPartnerLastName(savedTenantEntity.getPartnerLastName());
-        savedTenant.setPartnerPhoneNumber(savedTenantEntity.getPartnerPhoneNumber());
-        Address savedAddress = new Address();
-        savedAddress.setStreet(savedTenantEntity.getAddress().getStreet());
-        savedAddress.setAdditionalAddress(savedTenantEntity.getAddress().getAdditionalAddress());
-        savedAddress.setZipCode(savedTenantEntity.getAddress().getZipCode());
-        savedAddress.setTown(savedTenantEntity.getAddress().getTown());
-        savedTenant.setAddress(savedAddress);
-        return savedTenant;
+    private AddressEntity addressToEntity(Address address, AddressEntity addressEntity) {
+        addressEntity.setStreet(address.getStreet());
+        addressEntity.setAdditionalAddress(address.getAdditionalAddress());
+        addressEntity.setZipCode(address.getZipCode());
+        addressEntity.setTown(address.getTown());
+        return addressEntity;
+    }
+
+    private Tenant entityToTenant(TenantEntity tenantEntity) {
+        Tenant tenant = new Tenant();
+        Address address = new Address();
+        tenant.setId(tenantEntity.getId());
+        tenant.setFirstName(tenantEntity.getFirstName());
+        tenant.setLastName(tenantEntity.getLastName());
+        tenant.setEmail(tenantEntity.getEmail());
+        tenant.setPhoneNumber(tenantEntity.getPhoneNumber());
+        tenant.setPartnerFirstName(tenantEntity.getPartnerFirstName());
+        tenant.setPartnerLastName(tenantEntity.getPartnerLastName());
+        tenant.setPartnerPhoneNumber(tenantEntity.getPartnerPhoneNumber());
+        address.setStreet(tenantEntity.getAddress().getStreet());
+        address.setAdditionalAddress(tenantEntity.getAddress().getAdditionalAddress());
+        address.setZipCode(tenantEntity.getAddress().getZipCode());
+        address.setTown(tenantEntity.getAddress().getTown());
+        tenant.setAddress(address);
+        return tenant;
     }
 }
