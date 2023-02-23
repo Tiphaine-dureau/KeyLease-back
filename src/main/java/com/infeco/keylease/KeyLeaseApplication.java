@@ -25,7 +25,9 @@ public class KeyLeaseApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(configuration.getCorsAllowedOrigin());
+                registry.addMapping("/**")
+                        .allowedMethods("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedOrigins(configuration.getCorsAllowedOrigin());
             }
         };
     }

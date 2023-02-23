@@ -28,6 +28,16 @@ public class TenantController {
         return this.tenantService.getTenants();
     }
 
+    @GetMapping("/tenants/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Tenant> getTenantById(@PathVariable UUID id) {
+        try {
+            return ResponseEntity.ok(this.tenantService.getTenantById(id));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/tenants")
     @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
     public Tenant addTenant(@RequestBody Tenant tenant) {
