@@ -11,7 +11,10 @@ Nomenclature :
 - Security : en cas de vulnérabilités
 - Numéro de version : major.minor.patch
 
-### Unreleased
+### Unreleased  
+
+- GET /owners (entity - model - repository - service - controller)
+- Create table owner (liquibase) : 009
 
 ### [0.0.7] - 2023-02-24
 
