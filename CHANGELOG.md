@@ -17,6 +17,7 @@ Nomenclature :
 
 - GET /tenants/:id 
 - PUT /tenants with Bad Request Exception
+- DELETE /tenants
 
 ### [0.0.6] - 2023-02-22
 
