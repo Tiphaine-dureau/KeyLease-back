@@ -62,6 +62,15 @@ public class TenantService {
         }
     }
 
+    public void deleteTenant(UUID id) throws NotFoundEntity {
+        Optional<TenantEntity> optionalTenantEntity = this.tenantRepository.findById(id);
+        if (optionalTenantEntity.isPresent()) {
+            this.tenantRepository.delete(optionalTenantEntity.get());
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
+
     private void tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());

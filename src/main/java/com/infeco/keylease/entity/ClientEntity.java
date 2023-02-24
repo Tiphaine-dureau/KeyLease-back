@@ -31,7 +31,7 @@ public abstract class ClientEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     @JsonManagedReference
     private AddressEntity address;

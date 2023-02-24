@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.image.PixelGrabber;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +48,17 @@ public class TenantController {
         try {
             Tenant modifiedTenant = tenantService.modifyTenant(tenant, id);
             return ResponseEntity.ok(modifiedTenant);
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/tenants/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Void> deleteTenant(@PathVariable UUID id) {
+        try {
+            tenantService.deleteTenant(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (NotFoundEntity e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
