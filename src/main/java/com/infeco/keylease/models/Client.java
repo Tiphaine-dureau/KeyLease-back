@@ -19,6 +19,7 @@ public abstract class Client {
 
     public Client(ClientEntity clientEntity) {
         this.id = clientEntity.getId();
+        this.email = clientEntity.getEmail();
         this.lastName = clientEntity.getLastName();
         this.firstName = clientEntity.getFirstName();
         this.birthday = clientEntity.getBirthday();
