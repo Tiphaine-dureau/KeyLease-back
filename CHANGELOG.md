@@ -13,19 +13,21 @@ Nomenclature :
 
 ### Unreleased
 
-### Added
+### [0.0.7] - 2023-02-24
 
-- GET /tenants/:id 
+#### Added
+
+- GET /tenants/:id with Bad Request Exception
 - PUT /tenants with Bad Request Exception
-- DELETE /tenants
+- DELETE /tenants with Bad Request Exception
 
 ### [0.0.6] - 2023-02-22
 
 #### Added
 
 - models for AddressEntity - Client-Entity - TenantEntity 
-- /GET tenants
-- /POST tenant (TDD)
+- GET /tenants
+- POST /tenant (TDD)
 
 ### [0.0.5] - 2023-02-02
 
