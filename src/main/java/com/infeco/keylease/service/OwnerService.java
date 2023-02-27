@@ -43,7 +43,7 @@ public class OwnerService {
         ownerEntity.setLastName(owner.getLastName());
         ownerEntity.setEmail(owner.getEmail());
         ownerEntity.setPhoneNumber(owner.getPhoneNumber());
-        ownerEntity.setRib(owner.getRib());
+        ownerEntity.setIban(owner.getIban());
     }
 
     private void addressToEntity(Address address, AddressEntity addressEntity) {
@@ -61,7 +61,7 @@ public class OwnerService {
         owner.setLastName(ownerEntity.getLastName());
         owner.setEmail(ownerEntity.getEmail());
         owner.setPhoneNumber(ownerEntity.getPhoneNumber());
-        owner.setRib(ownerEntity.getRib());
+        owner.setIban(ownerEntity.getIban());
 
         address.setStreet(ownerEntity.getAddress().getStreet());
         address.setAdditionalAddress(ownerEntity.getAddress().getAdditionalAddress());

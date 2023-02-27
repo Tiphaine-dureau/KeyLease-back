@@ -10,17 +10,17 @@ import jakarta.persistence.Table;
 @Table(name = "owner")
 public class OwnerEntity extends ClientEntity {
 
-    @Column(name = "rib")
-    private String rib;
+    @Column(name = "iban")
+    private String iban;
 
     public OwnerEntity() {
     }
 
-    public String getRib() {
-        return rib;
+    public String getIban() {
+        return iban;
     }
 
-    public void setRib(String rib) {
-        this.rib = rib;
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 }

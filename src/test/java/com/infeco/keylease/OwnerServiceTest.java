@@ -42,14 +42,14 @@ public class OwnerServiceTest {
     public void testGetOwners() {
         Owner owner = new Owner();
         owner.setFirstName("OwnerFirstName");
-        owner.setRib("FR76 0000 6545 6789 3456");
+        owner.setIban("FR76 0000 6545 6789 3456");
         Address address = new Address();
         address.setStreet("Owner Street");
         owner.setAddress(address);
 
         OwnerEntity ownerEntity = new OwnerEntity();
         ownerEntity.setFirstName("OwnerFirstName");
-        ownerEntity.setRib("FR76 0000 6545 6789 3456");
+        ownerEntity.setIban("FR76 0000 6545 6789 3456");
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setStreet("Owner Street");
         ownerEntity.setAddress(addressEntity);
@@ -58,7 +58,7 @@ public class OwnerServiceTest {
         List<OwnerEntity> ownersEntity = List.of(ownerEntity);
         given(ownerRepository.findAll()).willReturn(ownersEntity);
         List<Owner> expectedOwner = ownerService.getOwners();
-        assert (expectedOwner.get(0).getRib()).equals(owners.get(0).getRib());
+        assert (expectedOwner.get(0).getIban()).equals(owners.get(0).getIban());
         assert (expectedOwner.get(0).getFirstName()).equals(owners.get(0).getFirstName());
         assert (expectedOwner.get(0).getAddress().getStreet()).equals(owners.get(0).getAddress().getStreet());
         verify(ownerRepository).findAll();
@@ -72,14 +72,14 @@ public class OwnerServiceTest {
         owner.setLastName("LastName");
         owner.setEmail("email@example.com");
         owner.setPhoneNumber("0987654321");
-        owner.setRib("FR76 0000 0000 0000 0000 0000 000");
+        owner.setIban("FR76 0000 0000 0000 0000 0000 000");
 
         OwnerEntity ownerEntity = new OwnerEntity();
         ownerEntity.setFirstName("FirstName");
         ownerEntity.setLastName("LastName");
         ownerEntity.setEmail("email@example.com");
         ownerEntity.setPhoneNumber("0987654321");
-        ownerEntity.setRib("FR76 0000 0000 0000 0000 0000 000");
+        ownerEntity.setIban("FR76 0000 0000 0000 0000 0000 000");
 
         Address address = new Address();
         owner.setAddress(address);
@@ -107,7 +107,7 @@ public class OwnerServiceTest {
         assertEquals("LastName",savedOwner.getLastName());
         assertEquals("email@example.com",savedOwner.getEmail());
         assertEquals("0987654321",savedOwner.getPhoneNumber());
-        assertEquals("FR76 0000 0000 0000 0000 0000 000",savedOwner.getRib());
+        assertEquals("FR76 0000 0000 0000 0000 0000 000",savedOwner.getIban());
 
         assertNotNull(savedOwner.getAddress());
         assertEquals("1 rue des Lilas",savedOwner.getAddress().getStreet());
