@@ -1,6 +1,5 @@
 package com.infeco.keylease.models;
 
-import com.infeco.keylease.entity.ClientEntity;
 import com.infeco.keylease.entity.OwnerEntity;
 
 public class Owner extends Client {
