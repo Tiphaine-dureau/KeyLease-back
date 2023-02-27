@@ -4,6 +4,7 @@ import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.OwnerEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Owner;
+import com.infeco.keylease.repository.AddressRepository;
 import com.infeco.keylease.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,11 @@ public class OwnerService {
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerService(OwnerRepository ownerRepository) {
+    private final AddressRepository addressRepository;
+
+    public OwnerService(OwnerRepository ownerRepository, AddressRepository addressRepository) {
         this.ownerRepository = ownerRepository;
+        this.addressRepository = addressRepository;
     }
 
     public List<Owner> getOwners() {
@@ -24,36 +28,47 @@ public class OwnerService {
     }
 
     public Owner addOwner(Owner owner) {
-            OwnerEntity ownerEntity = new OwnerEntity();
-            ownerEntity.setFirstName(owner.getFirstName());
-            ownerEntity.setLastName(owner.getLastName());
-            ownerEntity.setEmail(owner.getEmail());
-            ownerEntity.setPhoneNumber(owner.getPhoneNumber());
-            ownerEntity.setRib(owner.getRib());
+        AddressEntity addressEntity = new AddressEntity();
+        addressToEntity(owner.getAddress(), addressEntity);
+        AddressEntity savedAddressEntity = this.addressRepository.save(addressEntity);
+        OwnerEntity ownerEntity = new OwnerEntity();
+        ownerToEntity(owner, ownerEntity);
+        ownerEntity.setAddress(savedAddressEntity);
+        OwnerEntity savedOwnerEntity = this.ownerRepository.save(ownerEntity);
+        return entityToOwner(savedOwnerEntity);
+    }
 
-            AddressEntity addressEntity = new AddressEntity();
-            addressEntity.setStreet(owner.getAddress().getStreet());
-            addressEntity.setAdditionalAddress(owner.getAddress().getAdditionalAddress());
-            addressEntity.setZipCode(owner.getAddress().getZipCode());
-            addressEntity.setTown(owner.getAddress().getTown());
-            ownerEntity.setAddress(addressEntity);
+    private void ownerToEntity(Owner owner, OwnerEntity ownerEntity) {
+        ownerEntity.setFirstName(owner.getFirstName());
+        ownerEntity.setLastName(owner.getLastName());
+        ownerEntity.setEmail(owner.getEmail());
+        ownerEntity.setPhoneNumber(owner.getPhoneNumber());
+        ownerEntity.setRib(owner.getRib());
+    }
 
-            OwnerEntity savedOwnerEntity = this.ownerRepository.save(ownerEntity);
+    private void addressToEntity(Address address, AddressEntity addressEntity) {
+        addressEntity.setStreet(address.getStreet());
+        addressEntity.setAdditionalAddress(address.getAdditionalAddress());
+        addressEntity.setZipCode(address.getZipCode());
+        addressEntity.setTown(address.getTown());
+    }
 
-            Owner savedOwner = new Owner();
-            savedOwner.setFirstName(savedOwnerEntity.getFirstName());
-            savedOwner.setLastName(savedOwnerEntity.getLastName());
-            savedOwner.setEmail(savedOwnerEntity.getEmail());
-            savedOwner.setPhoneNumber(savedOwnerEntity.getPhoneNumber());
-            savedOwner.setRib(savedOwnerEntity.getRib());
+    private Owner entityToOwner(OwnerEntity ownerEntity) {
+        Owner owner = new Owner();
+        Address address = new Address();
+        owner.setId(ownerEntity.getId());
+        owner.setFirstName(ownerEntity.getFirstName());
+        owner.setLastName(ownerEntity.getLastName());
+        owner.setEmail(ownerEntity.getEmail());
+        owner.setPhoneNumber(ownerEntity.getPhoneNumber());
+        owner.setRib(ownerEntity.getRib());
 
-            Address savedAddress = new Address();
-            savedAddress.setStreet(savedOwnerEntity.getAddress().getStreet());
-            savedAddress.setAdditionalAddress(savedOwnerEntity.getAddress().getAdditionalAddress());
-            savedAddress.setZipCode(savedOwnerEntity.getAddress().getZipCode());
-            savedAddress.setTown(savedOwnerEntity.getAddress().getTown());
-            savedOwner.setAddress(savedAddress);
+        address.setStreet(ownerEntity.getAddress().getStreet());
+        address.setAdditionalAddress(ownerEntity.getAddress().getAdditionalAddress());
+        address.setZipCode(ownerEntity.getAddress().getZipCode());
+        address.setTown(ownerEntity.getAddress().getTown());
+        owner.setAddress(address);
 
-            return savedOwner;
+        return owner;
     }
 }
