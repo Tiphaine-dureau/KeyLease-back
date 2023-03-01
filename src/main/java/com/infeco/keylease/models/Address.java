@@ -15,6 +15,7 @@ public class Address {
         this.street = addressEntity.getStreet();
         this.additionalAddress = addressEntity.getAdditionalAddress();
         this.zipCode = addressEntity.getZipCode();
+        this.town = addressEntity.getTown();
     }
 
     public String getStreet() {
