@@ -61,6 +61,14 @@ public class OwnerService {
         }
     }
 
+    public void deleteOwner(UUID id) throws NotFoundEntity {
+        Optional<OwnerEntity> optionalOwnerEntity = this.ownerRepository.findById(id);
+        if (optionalOwnerEntity.isPresent()) {
+            this.ownerRepository.delete(optionalOwnerEntity.get());
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
 
     private void ownerToEntity(Owner owner, OwnerEntity ownerEntity) {
         ownerEntity.setFirstName(owner.getFirstName());
