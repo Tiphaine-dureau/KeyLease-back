@@ -52,4 +52,15 @@ public class OwnerController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/owners/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Void> deleteOwner(@PathVariable UUID id) {
+        try {
+            ownerService.deleteOwner(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
