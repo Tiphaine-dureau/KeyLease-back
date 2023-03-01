@@ -11,10 +11,18 @@ Nomenclature :
 - Security : en cas de vulnérabilités
 - Numéro de version : major.minor.patch
 
-### Unreleased  
+### Unreleased
+
+### [0.0.8] - 2023-03-01
+
+#### Added
 
 - GET /owners (entity - model - repository - service - controller)
 - Create table owner (liquibase) : 009
+- GET /owners/:id - TDD (service and controller tests)
+- POST /owners - TDD (service and controller tests)
+- PUT /owners/:id - TDD (service and controller tests)
+- DELETE /owners/:id - TDD (service and controller tests)
 
 ### [0.0.7] - 2023-02-24
 
@@ -28,7 +36,7 @@ Nomenclature :
 
 #### Added
 
-- models for AddressEntity - Client-Entity - TenantEntity 
+- models for AddressEntity - Client-Entity - TenantEntity
 - GET /tenants
 - POST /tenant (TDD)
 
