@@ -171,7 +171,7 @@ public class OwnerServiceTest {
 
     @Test
     public void testPutOwner() throws NotFoundEntity {
-        // Création propriétaire à factice
+        // Création propriétaire factice
         Owner owner = new Owner();
         owner.setFirstName("John");
         owner.setLastName("Doe");
@@ -231,5 +231,48 @@ public class OwnerServiceTest {
         verify(ownerRepository).findById(existingOwnerEntity.getId());
         // Vérification que la méthode save est appelée avec l'OwnerEntity modifié
         verify(ownerRepository).save(any(OwnerEntity.class));
+    }
+
+    @Test
+    public void testDeleteOwner() throws Exception {
+        // Création propriétaire factice
+        UUID id = UUID.randomUUID();
+        Owner owner = new Owner();
+        owner.setId(id);
+        owner.setFirstName("John");
+        owner.setLastName("Doe");
+        owner.setEmail("doe@example.com");
+        owner.setPhoneNumber("0787654321");
+        owner.setIban("FR76 0001 0001 0001 0001 0001 001");
+
+        OwnerEntity ownerEntity = new OwnerEntity();
+        ownerEntity.setFirstName("John");
+        ownerEntity.setLastName("Doe");
+        ownerEntity.setEmail("doe@example.com");
+        ownerEntity.setPhoneNumber("0787654321");
+        ownerEntity.setIban("FR76 0001 0001 0001 0001 0001 001");
+
+        Address address = new Address();
+        owner.setAddress(address);
+        address.setStreet("1 rue des Lilas");
+        address.setAdditionalAddress("Bat C1 apt 22");
+        address.setZipCode("33130");
+        address.setTown("Bègles");
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("1 rue des Lilas");
+        addressEntity.setAdditionalAddress("Bat C1 apt 22");
+        addressEntity.setZipCode("33130");
+        addressEntity.setTown("Bègles");
+        ownerEntity.setAddress(addressEntity);
+
+        // Mock du repository pour renvoyer le propriétaire factice
+        when(ownerRepository.findById(id)).thenReturn(Optional.of(ownerEntity));
+
+        // Appel de la méthode à tester
+        ownerService.deleteOwner(id);
+
+        // Vérification que la méthode delete du repository a bien été appelée avec l'ownerEntity
+        verify(ownerRepository, times(1)).delete(ownerEntity);
     }
 }
