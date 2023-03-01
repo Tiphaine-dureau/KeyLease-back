@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -121,6 +122,7 @@ public class OwnerControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json("{\"id\": \"" + owner.getId() + "\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"phoneNumber\": \"0756432189\", \"email\": \"john@example.com\", \"iban\": \"FR76 0000 0000 0000 0000 0000 000\", \"address\": {\"street\": \"1 rue des Pivoines\", \"additionalAddress\": \"B Apt 8\", \"zipCode\": \"33000\", \"town\": \"Bordeaux\"}}"))
                 .andReturn();
     }
+
     @Test
     @WithMockUser(authorities = AuthoritiesConstants.USER)
     public void testGetOwnerById() throws Exception {
@@ -153,6 +155,40 @@ public class OwnerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json("{\"id\": \"" + ownerId + "\", \"firstName\": \"John\", \"lastName\": \"Doe\", \"phoneNumber\": \"0756432189\", \"email\": \"john@example.com\", \"iban\": \"FR76 0000 0000 0000 0000 0000 000\", \"address\": {\"street\": \"1 rue des Pivoines\", \"additionalAddress\": \"B Apt 8\", \"zipCode\": \"33000\", \"town\": \"Bordeaux\"}}"))
                 .andReturn();
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthoritiesConstants.USER)
+    public void testDeleteOwner() throws Exception {
+        // Création d'un propriétaire factice
+        UUID ownerId = UUID.randomUUID();
+        Owner owner = new Owner();
+        owner.setId(ownerId);
+        owner.setFirstName("John");
+        owner.setLastName("Doe");
+        owner.setPhoneNumber("0756432189");
+        owner.setEmail("john@example.com");
+        owner.setIban("FR76 0000 0000 0000 0000 0000 000");
+        Address address = new Address();
+        address.setStreet("1 rue des Pivoines");
+        address.setAdditionalAddress("B Apt 8");
+        address.setZipCode("33000");
+        address.setTown("Bordeaux");
+        owner.setAddress(address);
+
+        // Mock du service pour renvoyer le propriétaire factice
+        doNothing().when(ownerService).deleteOwner(owner.getId());
+
+        // Construction de la requête DELETE pour supprimer un propriétaire
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete("/owners/{id}", owner.getId())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        // Exécution de la requête et vérification du résultat
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isNoContent())
+                .andReturn();
+
     }
 
 }
