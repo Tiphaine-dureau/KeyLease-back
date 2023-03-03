@@ -13,6 +13,8 @@ Nomenclature :
 
 ### Unreleased
 
+- Added GET /me (controller, service and tests)
+
 ### [0.0.8] - 2023-03-01
 
 #### Added
