@@ -61,7 +61,6 @@ public class UserServiceTest {
         String email = "test@example.com";
         User user = new User();
         user.setEmail(email);
-        user.setPassword("azerty12345");
 
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(email);
