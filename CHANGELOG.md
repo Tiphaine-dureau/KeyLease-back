@@ -14,6 +14,7 @@ Nomenclature :
 ### Unreleased
 
 - Added GET /me (controller, service and tests)
+- Added api-prefix
 
 ### [0.0.8] - 2023-03-01
 
