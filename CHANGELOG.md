@@ -13,8 +13,14 @@ Nomenclature :
 
 ### Unreleased
 
+#### Added
+
 - Added GET /me (controller, service and tests)
 - Added api-prefix
+
+#### Fixed
+
+- Removed password from response
 
 ### [0.0.8] - 2023-03-01
 

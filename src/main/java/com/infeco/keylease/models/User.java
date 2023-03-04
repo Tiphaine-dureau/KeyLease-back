@@ -1,7 +1,7 @@
 package com.infeco.keylease.models;
 
-import com.infeco.keylease.entity.UserEntity;
 import com.infeco.keylease.entity.AuthorityEntity;
+import com.infeco.keylease.entity.UserEntity;
 
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +14,6 @@ public class User {
     String firstName;
     String email;
     Set<String> authorities;
-    String password;
 
     public User() {
     }
@@ -24,7 +23,6 @@ public class User {
         this.firstName = userEntity.getFirstName();
         this.lastName = userEntity.getLastName();
         this.email = userEntity.getEmail();
-        this.password = userEntity.getPassword();
         this.authorities = userEntity.getAuthorities().stream().map(AuthorityEntity::getName).collect(Collectors.toSet());
     }
 
@@ -58,14 +56,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Set<String> getAuthorities() {
