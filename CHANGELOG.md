@@ -18,6 +18,8 @@ Nomenclature :
 - Added GET /me (controller, service and tests)
 - Added api-prefix
 - Updated register : checked if email used to login is existing
+- Added GET /properties : TDD (service and controller)
+- Added tables in liquibase : property , type and property_type (010), (011), (012)
 
 #### Fixed
 
