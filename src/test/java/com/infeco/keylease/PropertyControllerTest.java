@@ -11,10 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,4 +90,34 @@ public class PropertyControllerTest {
         // Vérification que le service de propriété a bien été appelé
         verify(propertyService, Mockito.times(1)).getProperties();
     }
+
+    @Test
+    @WithMockUser(authorities = AuthoritiesConstants.USER)
+    public void testAddProperty() throws Exception {
+        Property property = new Property();
+        property.setArea("110");
+        property.setRoomsNumber("5");
+        property.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
+        property.setType("Maison");
+        Address address = new Address();
+        address.setStreet("1 rue des Lauriers");
+        address.setZipCode("33130");
+        address.setTown("Bègles");
+        property.setAddress(address);
+
+        when(propertyService.addProperty(any(Property.class))).thenReturn(property);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/properties")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"area\": \"110\", \"roomsNumber\": \"5\", \"description\": \"Maison de 5 pièces mesurant 110m2 en plein centre ville\", \"type\": \"Maison\", \"address\": {\"street\": \"1 rue des Lauriers\", \"zipCode\": \"33130\", \"town\": \"Bègles\"}}");
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("{\"area\": \"110\", \"roomsNumber\": \"5\", \"description\": \"Maison de 5 pièces mesurant 110m2 en plein centre ville\", \"type\": \"Maison\", \"address\": {\"street\": \"1 rue des Lauriers\", \"zipCode\": \"33130\", \"town\": \"Bègles\"}}"))
+                .andReturn();
+
+    }
+
+
 }
