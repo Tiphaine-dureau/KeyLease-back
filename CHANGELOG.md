@@ -22,6 +22,7 @@ Nomenclature :
 - Added tables in liquibase : property , type and property_type (010), (011), (012)
 - Added POST /properties : TDD (service and controller)
 - Added GET /properties/:id and PUT /properties/:id (service and controller with TDD)
+- Added DELETE /properties/:id - TDD
 
 #### Fixed
 
