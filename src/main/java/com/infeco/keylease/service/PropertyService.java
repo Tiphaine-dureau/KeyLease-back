@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,6 +55,29 @@ public class PropertyService {
         return entityToProperty(savedPropertyEntity);
     }
 
+
+    public Property getPropertyById(UUID id) throws NotFoundEntity {
+        Optional<PropertyEntity> optionalPropertyEntity = this.propertyRepository.findById(id);
+        if (optionalPropertyEntity.isPresent()) {
+            return entityToProperty(optionalPropertyEntity.get());
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
+
+    public Property modifyProperty(Property property, UUID id) throws NotFoundEntity {
+        Optional<PropertyEntity> optionalPropertyEntity = this.propertyRepository.findById(id);
+        if (optionalPropertyEntity.isPresent()) {
+            PropertyEntity propertyEntity = optionalPropertyEntity.get();
+            propertyToEntity(property, propertyEntity);
+            addressToEntity(property.getAddress(), propertyEntity.getAddress());
+            PropertyEntity savedEntity = this.propertyRepository.save(propertyEntity);
+            return entityToProperty(savedEntity);
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
+
     private void propertyToEntity(Property property, PropertyEntity propertyEntity) {
         propertyEntity.setArea(property.getArea());
         propertyEntity.setRoomsNumber(property.getRoomsNumber());
@@ -70,6 +94,7 @@ public class PropertyService {
     private Property entityToProperty(PropertyEntity propertyEntity) {
         Property property = new Property();
         Address address = new Address();
+        property.setId(propertyEntity.getId());
         property.setArea(propertyEntity.getArea());
         property.setRoomsNumber(propertyEntity.getRoomsNumber());
         property.setDescription(propertyEntity.getDescription());
