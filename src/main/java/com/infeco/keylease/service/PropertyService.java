@@ -82,6 +82,9 @@ public class PropertyService {
         propertyEntity.setArea(property.getArea());
         propertyEntity.setRoomsNumber(property.getRoomsNumber());
         propertyEntity.setDescription(property.getDescription());
+        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        propertyTypeEntity.setName(property.getType());
+        propertyEntity.setPropertyType(propertyTypeEntity);
     }
 
     private void addressToEntity(Address address, AddressEntity addressEntity) {
