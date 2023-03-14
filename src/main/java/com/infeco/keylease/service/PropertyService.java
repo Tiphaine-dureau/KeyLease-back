@@ -78,6 +78,15 @@ public class PropertyService {
         }
     }
 
+    public void deleteProperty(UUID id) throws NotFoundEntity {
+        Optional<PropertyEntity> optionalPropertyEntity = this.propertyRepository.findById(id);
+        if (optionalPropertyEntity.isPresent()) {
+            this.propertyRepository.delete(optionalPropertyEntity.get());
+        } else {
+            throw new NotFoundEntity();
+        }
+    }
+
     private void propertyToEntity(Property property, PropertyEntity propertyEntity) {
         propertyEntity.setArea(property.getArea());
         propertyEntity.setRoomsNumber(property.getRoomsNumber());
