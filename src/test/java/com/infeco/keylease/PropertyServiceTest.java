@@ -26,8 +26,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -243,5 +242,46 @@ public class PropertyServiceTest {
 
         // Vérification que la méthode modifyProperty lève une exception NotFoundEntity
         assertThrows(NotFoundEntity.class, () -> propertyService.modifyProperty(propertyToModify, UUID.randomUUID()));
+    }
+
+    @Test
+    public void testDeleteProperty() throws Exception {
+        // Création d'un bien factice
+        UUID id = UUID.randomUUID();
+        Property property = new Property();
+        property.setId(id);
+        property.setArea("90");
+        property.setRoomsNumber("4");
+        property.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        property.setType("Maison");
+        Address address = new Address();
+        address.setStreet("1 rue des Lilas");
+        address.setZipCode("64600");
+        address.setTown("Anglet");
+        property.setAddress(address);
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("1 rue des Lilas");
+        addressEntity.setZipCode("64600");
+        addressEntity.setTown("Anglet");
+
+        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        propertyTypeEntity.setName("Maison");
+
+        PropertyEntity propertyEntity = new PropertyEntity();
+        propertyEntity.setArea("90");
+        propertyEntity.setRoomsNumber("4");
+        propertyEntity.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        propertyEntity.setPropertyType(propertyTypeEntity);
+        propertyEntity.setAddress(addressEntity);
+
+        //Mock du repository pour renvoyer le locataire factice
+        when(propertyRepository.findById(id)).thenReturn(Optional.of(propertyEntity));
+
+        // Appel de la méthode à tester
+        propertyService.deleteProperty(id);
+
+        // Vérification que la méthode delete du repository a bien été appelée avec la propertyEntity
+        verify(propertyRepository, times(1)).delete(propertyEntity);
     }
 }
