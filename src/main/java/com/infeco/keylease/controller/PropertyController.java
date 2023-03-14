@@ -56,4 +56,15 @@ public class PropertyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/properties/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Void> deleteProperty(@PathVariable UUID id) {
+        try {
+            propertyService.deleteProperty(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
