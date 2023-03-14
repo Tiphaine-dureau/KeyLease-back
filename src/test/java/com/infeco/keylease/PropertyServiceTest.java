@@ -3,6 +3,7 @@ package com.infeco.keylease;
 import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.PropertyEntity;
 import com.infeco.keylease.entity.PropertyTypeEntity;
+import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Property;
 import com.infeco.keylease.repository.AddressRepository;
@@ -20,13 +21,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -92,6 +93,7 @@ public class PropertyServiceTest {
 
     @Test
     public void testAddProperty() throws Exception {
+        // Création d'un bien factice
         Property property = new Property();
         property.setArea("90");
         property.setRoomsNumber("4");
@@ -136,5 +138,110 @@ public class PropertyServiceTest {
         assertEquals("1 rue des Lilas", savedProperty.getAddress().getStreet());
         assertEquals("64600", savedProperty.getAddress().getZipCode());
         assertEquals("Anglet", savedProperty.getAddress().getTown());
+    }
+
+    @Test
+    public void testGetPropertyById() throws NotFoundEntity {
+        // Création d'un bien factice
+        UUID id = UUID.randomUUID();
+        Property property = new Property();
+        property.setId(id);
+        property.setArea("90");
+        property.setRoomsNumber("4");
+        property.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        property.setType("Maison");
+        Address address = new Address();
+        address.setStreet("1 rue des Lilas");
+        address.setZipCode("64600");
+        address.setTown("Anglet");
+        property.setAddress(address);
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("1 rue des Lilas");
+        addressEntity.setZipCode("64600");
+        addressEntity.setTown("Anglet");
+
+        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        propertyTypeEntity.setName("Maison");
+
+        PropertyEntity propertyEntity = new PropertyEntity();
+        propertyEntity.setArea("90");
+        propertyEntity.setRoomsNumber("4");
+        propertyEntity.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        propertyEntity.setPropertyType(propertyTypeEntity);
+        propertyEntity.setAddress(addressEntity);
+
+        // Mock du repository pour renvoyer le bien factice
+        when(propertyRepository.findById(id)).thenReturn(Optional.of(propertyEntity));
+        // Exécution de la méthode à tester
+        Property propertyById = propertyService.getPropertyById(id);
+
+        // Vérification du résultat
+        assertNotNull(propertyById);
+        assertEquals(id, property.getId());
+        assertEquals("90", property.getArea());
+        assertEquals("4", property.getRoomsNumber());
+        assertEquals("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles", property.getDescription());
+
+        assertNotNull(property.getType());
+        assertEquals("Maison", property.getType());
+
+        assertNotNull(property.getAddress());
+        assertEquals("1 rue des Lilas", property.getAddress().getStreet());
+        assertEquals("64600", property.getAddress().getZipCode());
+        assertEquals("Anglet", property.getAddress().getTown());
+
+    }
+
+    @Test
+    public void testPutProperty() throws NotFoundEntity {
+        // Création d'un bien factice à modifier
+        Property propertyToModify = new Property();
+        propertyToModify.setArea("90");
+        propertyToModify.setRoomsNumber("4");
+        propertyToModify.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        Address address = new Address();
+        address.setStreet("1 rue des Jacintes");
+        address.setZipCode("33600");
+        address.setTown("Pessac");
+        propertyToModify.setAddress(address);
+        propertyToModify.setType("Maison");
+
+        // Création d'une PropertyEntity existante
+        UUID id = UUID.randomUUID();
+        PropertyEntity originalEntity = new PropertyEntity();
+        originalEntity.setId(id);
+        originalEntity.setArea("89");
+        originalEntity.setRoomsNumber("4");
+        originalEntity.setDescription("Maison de 4 pièces mesurant 89m2");
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setId(UUID.randomUUID());
+        addressEntity.setStreet("1 rue des Jacintes");
+        addressEntity.setZipCode("33600");
+        addressEntity.setTown("Pessac");
+        originalEntity.setAddress(addressEntity);
+        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        propertyTypeEntity.setName("Maison");
+        originalEntity.setPropertyType(propertyTypeEntity);
+
+        when(propertyRepository.findById(id)).thenReturn(Optional.of(originalEntity));
+        when(propertyRepository.save(any(PropertyEntity.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // Appel de la méthode à tester pour modifier la propriété existante
+        Property modifiedProperty = propertyService.modifyProperty(propertyToModify, id);
+
+        // Vérification que la propriété a été modifiée correctement
+        assertEquals(id, modifiedProperty.getId());
+        assertEquals("90", modifiedProperty.getArea());
+        assertEquals("4", modifiedProperty.getRoomsNumber());
+        assertEquals("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles", modifiedProperty.getDescription());
+        assertEquals("Maison", modifiedProperty.getType());
+        Address modifiedAddress = modifiedProperty.getAddress();
+        assertEquals("1 rue des Jacintes", modifiedAddress.getStreet());
+        assertEquals("33600", modifiedAddress.getZipCode());
+        assertEquals("Pessac", modifiedAddress.getTown());
+
+        // Vérification que la méthode modifyProperty lève une exception NotFoundEntity
+        assertThrows(NotFoundEntity.class, () -> propertyService.modifyProperty(propertyToModify, UUID.randomUUID()));
     }
 }
