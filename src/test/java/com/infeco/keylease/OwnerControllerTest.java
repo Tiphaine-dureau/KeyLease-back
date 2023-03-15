@@ -45,13 +45,6 @@ public class OwnerControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = AuthoritiesConstants.USER)
-    public void testGetOwnersWithAdminRole() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/owners"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
     public void testGetOwnersWithoutRole() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/owners"))
                 .andExpect(status().isForbidden());

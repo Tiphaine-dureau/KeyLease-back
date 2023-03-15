@@ -1,7 +1,7 @@
 package com.infeco.keylease.models;
 
-import com.infeco.keylease.entity.UserEntity;
 import com.infeco.keylease.entity.AuthorityEntity;
+import com.infeco.keylease.entity.UserEntity;
 
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class User {
     UUID id;
     String lastName;
-    String firsName;
+    String firstName;
     String email;
     Set<String> authorities;
 
@@ -20,7 +20,7 @@ public class User {
 
     public User(UserEntity userEntity) {
         this.id = userEntity.getId();
-        this.firsName = userEntity.getFirstName();
+        this.firstName = userEntity.getFirstName();
         this.lastName = userEntity.getLastName();
         this.email = userEntity.getEmail();
         this.authorities = userEntity.getAuthorities().stream().map(AuthorityEntity::getName).collect(Collectors.toSet());
@@ -42,12 +42,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getFirsName() {
-        return firsName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirsName(String firsName) {
-        this.firsName = firsName;
+    public void setFirstName(String firsName) {
+        this.firstName = firsName;
     }
 
     public String getEmail() {
@@ -71,11 +71,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firsName, user.firsName) && Objects.equals(email, user.email) && Objects.equals(authorities, user.authorities);
+        return Objects.equals(id, user.id) && Objects.equals(lastName, user.lastName) && Objects.equals(firstName, user.firstName) && Objects.equals(email, user.email) && Objects.equals(authorities, user.authorities);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastName, firsName, email, authorities);
+        return Objects.hash(id, lastName, firstName, email, authorities);
     }
 }

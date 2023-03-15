@@ -13,6 +13,26 @@ Nomenclature :
 
 ### Unreleased
 
+### [0.0.9] - 2023-03- 15
+
+#### Added
+
+- Added GET /me (controller, service and tests)
+- Added api-prefix
+- Added GET /properties : TDD (service and controller)
+- Added tables in liquibase : property , type and property_type (010), (011), (012)
+- Added POST /properties : TDD (service and controller)
+- Added GET /properties/:id and PUT /properties/:id (service and controller with TDD)
+- Added DELETE /properties/:id - TDD
+
+#### Updated
+
+- Updated register : checked if email used to login is existing
+
+#### Fixed
+
+- Removed password from response
+
 ### [0.0.8] - 2023-03-01
 
 #### Added
