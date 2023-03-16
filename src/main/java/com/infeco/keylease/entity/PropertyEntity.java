@@ -85,4 +85,5 @@ public class PropertyEntity {
     public void setPropertyType(PropertyTypeEntity propertyType) {
         this.propertyType = propertyType;
     }
+
 }

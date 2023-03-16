@@ -40,5 +40,4 @@ public class Tenant extends Client {
     public void setPartnerPhoneNumber(String partnerPhoneNumber) {
         this.partnerPhoneNumber = partnerPhoneNumber;
     }
-
 }
