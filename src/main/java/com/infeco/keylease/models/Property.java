@@ -11,6 +11,7 @@ public class Property {
     String description;
     Address address;
     String type;
+    UUID leaseContractId;
 
     public Property() {
     }
@@ -22,6 +23,7 @@ public class Property {
         this.description = propertyEntity.getDescription();
         this.type = propertyEntity.getPropertyType().getName();
         this.address = new Address(propertyEntity.getAddress());
+        this.leaseContractId = propertyEntity.getLeaseContract() != null ? propertyEntity.getLeaseContract().getId() : null;
     }
 
     public UUID getId() {
@@ -72,4 +74,11 @@ public class Property {
         this.address = address;
     }
 
+    public UUID getLeaseContractId() {
+        return leaseContractId;
+    }
+
+    public void setLeaseContractId(UUID leaseContractId) {
+        this.leaseContractId = leaseContractId;
+    }
 }

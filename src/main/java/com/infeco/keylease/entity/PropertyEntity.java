@@ -35,6 +35,9 @@ public class PropertyEntity {
     )
     private PropertyTypeEntity propertyType;
 
+    @OneToOne(mappedBy = "property")
+    private LeaseContractEntity leaseContract;
+
     public PropertyEntity() {
     }
 
@@ -86,4 +89,11 @@ public class PropertyEntity {
         this.propertyType = propertyType;
     }
 
+    public LeaseContractEntity getLeaseContract() {
+        return leaseContract;
+    }
+
+    public void setLeaseContract(LeaseContractEntity leaseContract) {
+        this.leaseContract = leaseContract;
+    }
 }
