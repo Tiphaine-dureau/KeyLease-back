@@ -17,9 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -74,6 +76,49 @@ public class LeaseContractControllerTest {
                 .andExpect(jsonPath("$[0].property.address.zipCode", is(leaseContract.getProperty().getAddress().getZipCode())))
                 .andExpect(jsonPath("$[0].property.address.town", is(leaseContract.getProperty().getAddress().getTown())));
 
+    }
+
+    @Test
+    @WithMockUser(authorities = AuthoritiesConstants.USER)
+    public void testGetLeaseContractById() throws Exception {
+        LeaseContract leaseContract = createLeaseContract();
+        UUID leaseContractId = UUID.randomUUID();
+        leaseContract.setId(leaseContractId);
+
+        // Mock du service pour renvoyer le contrat fictif
+        when(leaseContractService.getLeaseContractById(leaseContractId)).thenReturn(leaseContract);
+        mockMvc.perform(get("/lease-contracts/{id}", leaseContractId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(leaseContract.getId().toString()))
+                .andExpect(jsonPath("$.rentAmount").value(leaseContract.getRentAmount()))
+                .andExpect(jsonPath("$.owner.firstName").value(leaseContract.getOwner().getFirstName()))
+                .andExpect(jsonPath("$.owner.lastName").value(leaseContract.getOwner().getLastName()))
+                .andExpect(jsonPath("$.owner.phoneNumber").value(leaseContract.getOwner().getPhoneNumber()))
+                .andExpect(jsonPath("$.owner.email").value(leaseContract.getOwner().getEmail()))
+                .andExpect(jsonPath("$.owner.iban").value(leaseContract.getOwner().getIban()))
+                .andExpect(jsonPath("$.owner.address.street").value(leaseContract.getOwner().getAddress().getStreet()))
+                .andExpect(jsonPath("$.owner.address.zipCode").value(leaseContract.getOwner().getAddress().getZipCode()))
+                .andExpect(jsonPath("$.owner.address.town").value(leaseContract.getOwner().getAddress().getTown()))
+                .andExpect(jsonPath("$.tenant.firstName").value(leaseContract.getTenant().getFirstName()))
+                .andExpect(jsonPath("$.tenant.lastName").value(leaseContract.getTenant().getLastName()))
+                .andExpect(jsonPath("$.tenant.phoneNumber").value(leaseContract.getTenant().getPhoneNumber()))
+                .andExpect(jsonPath("$.tenant.email").value(leaseContract.getTenant().getEmail()))
+                .andExpect(jsonPath("$.tenant.partnerFirstName").value(leaseContract.getTenant().getPartnerFirstName()))
+                .andExpect(jsonPath("$.tenant.partnerLastName").value(leaseContract.getTenant().getPartnerLastName()))
+                .andExpect(jsonPath("$.tenant.partnerPhoneNumber").value(leaseContract.getTenant().getPartnerPhoneNumber()))
+                .andExpect(jsonPath("$.tenant.address.street").value(leaseContract.getTenant().getAddress().getStreet()))
+                .andExpect(jsonPath("$.tenant.address.zipCode").value(leaseContract.getTenant().getAddress().getZipCode()))
+                .andExpect(jsonPath("$.tenant.address.town").value(leaseContract.getTenant().getAddress().getTown()))
+                .andExpect(jsonPath("$.property.area").value(leaseContract.getProperty().getArea()))
+                .andExpect(jsonPath("$.property.type").value(leaseContract.getProperty().getType()))
+                .andExpect(jsonPath("$.property.roomsNumber").value(leaseContract.getProperty().getRoomsNumber()))
+                .andExpect(jsonPath("$.property.description").value(leaseContract.getProperty().getDescription()))
+                .andExpect(jsonPath("$.property.address.street").value(leaseContract.getProperty().getAddress().getStreet()))
+                .andExpect(jsonPath("$.property.address.zipCode").value(leaseContract.getProperty().getAddress().getZipCode()))
+                .andExpect(jsonPath("$.property.address.town").value(leaseContract.getProperty().getAddress().getTown()));
+
+        verify(leaseContractService).getLeaseContractById(leaseContractId);
     }
 
     private LeaseContract createLeaseContract() {
