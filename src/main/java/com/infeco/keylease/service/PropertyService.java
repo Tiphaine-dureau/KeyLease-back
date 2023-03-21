@@ -39,7 +39,7 @@ public class PropertyService {
         PropertyEntity propertyEntity = new PropertyEntity();
         propertyToEntity(property, propertyEntity);
 
-        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        PropertyTypeEntity propertyTypeEntity;
         Optional<PropertyTypeEntity> propertyTypeEntityOptional = this.propertyTypeRepository.findById(property.getType());
         if (propertyTypeEntityOptional.isPresent()) {
             propertyTypeEntity = propertyTypeEntityOptional.get();
@@ -92,7 +92,6 @@ public class PropertyService {
         propertyEntity.setDescription(property.getDescription());
         PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
         propertyTypeEntity.setName(property.getType());
-        propertyEntity.setPropertyType(propertyTypeEntity);
     }
 
     private void addressToEntity(Address address, AddressEntity addressEntity) {
