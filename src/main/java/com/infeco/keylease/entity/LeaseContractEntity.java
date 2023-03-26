@@ -3,6 +3,7 @@ package com.infeco.keylease.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +16,12 @@ public class LeaseContractEntity {
 
     @Column(name = "rent_amount", precision = 10, scale = 2)
     private BigDecimal rentAmount;
+
+    @Column(name = "rent_charges", precision = 10, scale = 2)
+    private BigDecimal rentCharges;
+
+    @Column(name = "date_contract_signature")
+    private Date dateContractSignature;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
@@ -45,6 +52,22 @@ public class LeaseContractEntity {
 
     public void setRentAmount(BigDecimal rentAmount) {
         this.rentAmount = rentAmount;
+    }
+
+    public BigDecimal getRentCharges() {
+        return rentCharges;
+    }
+
+    public void setRentCharges(BigDecimal rentCharges) {
+        this.rentCharges = rentCharges;
+    }
+
+    public Date getDateContractSignature() {
+        return dateContractSignature;
+    }
+
+    public void setDateContractSignature(Date dateContractSignature) {
+        this.dateContractSignature = dateContractSignature;
     }
 
     public OwnerEntity getOwner() {

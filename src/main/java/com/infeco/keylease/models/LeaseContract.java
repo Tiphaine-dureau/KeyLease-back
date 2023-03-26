@@ -3,11 +3,14 @@ package com.infeco.keylease.models;
 import com.infeco.keylease.entity.LeaseContractEntity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 public class LeaseContract {
     UUID id;
     BigDecimal rentAmount;
+    BigDecimal rentCharges;
+    Date dateContractSignature;
     Owner owner;
     Tenant tenant;
     Property property;
@@ -18,6 +21,8 @@ public class LeaseContract {
     public LeaseContract(LeaseContractEntity leaseContractEntity) {
         this.id = leaseContractEntity.getId();
         this.rentAmount = leaseContractEntity.getRentAmount();
+        this.rentCharges = leaseContractEntity.getRentCharges();
+        this.dateContractSignature = leaseContractEntity.getDateContractSignature();
         this.owner = new Owner(leaseContractEntity.getOwner());
         this.tenant = new Tenant(leaseContractEntity.getTenant());
         this.property = new Property(leaseContractEntity.getProperty());
@@ -37,6 +42,22 @@ public class LeaseContract {
 
     public void setRentAmount(BigDecimal rentAmount) {
         this.rentAmount = rentAmount;
+    }
+
+    public BigDecimal getRentCharges() {
+        return rentCharges;
+    }
+
+    public void setRentCharges(BigDecimal rentCharges) {
+        this.rentCharges = rentCharges;
+    }
+
+    public Date getDateContractSignature() {
+        return dateContractSignature;
+    }
+
+    public void setDateContractSignature(Date dateContractSignature) {
+        this.dateContractSignature = dateContractSignature;
     }
 
     public Owner getOwner() {
