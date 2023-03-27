@@ -13,6 +13,15 @@ Nomenclature :
 
 ### Unreleased
 
+#### Added
+
+- Added GET /lease-contracts with unit test
+- Added lease-contract table in liquibase with some data (013)
+- Added GET /lease-contracts/:id with unit test
+- Added POST /lease-contracts
+- Added PUT /lease-contracts/:id
+- Added DELETE /lease-contracts/:id
+
 ### [0.0.9] - 2023-03- 15
 
 #### Added
