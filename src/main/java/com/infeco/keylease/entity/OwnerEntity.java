@@ -23,4 +23,5 @@ public class OwnerEntity extends ClientEntity {
     public void setIban(String iban) {
         this.iban = iban;
     }
+
 }

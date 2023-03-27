@@ -1,6 +1,7 @@
 package com.infeco.keylease;
 
 import com.infeco.keylease.entity.AddressEntity;
+import com.infeco.keylease.entity.LeaseContractEntity;
 import com.infeco.keylease.entity.PropertyEntity;
 import com.infeco.keylease.entity.PropertyTypeEntity;
 import com.infeco.keylease.exceptions.NotFoundEntity;
@@ -45,47 +46,48 @@ public class PropertyServiceTest {
 
     @Test
     public void testGetProperties() {
-        Property property = new Property();
-        property.setArea("110");
-        property.setRoomsNumber("5");
-        property.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
-        property.setType("Maison");
-        Address address = new Address();
-        address.setStreet("1 rue des Lauriers");
-        address.setZipCode("33130");
-        address.setTown("Bègles");
-        property.setAddress(address);
+        // Création d'un bien factice
+        UUID propertyId = UUID.randomUUID();
+        UUID idLeaseContract = UUID.randomUUID();
 
-        PropertyEntity propertyEntity = new PropertyEntity();
-        propertyEntity.setArea("110");
-        propertyEntity.setRoomsNumber("5");
-        propertyEntity.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setStreet("1 rue des Lilas");
+        addressEntity.setZipCode("64600");
+        addressEntity.setTown("Anglet");
+
         PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
         propertyTypeEntity.setName("Maison");
-        propertyEntity.setPropertyType(propertyTypeEntity);
-        AddressEntity addressEntity = new AddressEntity();
-        addressEntity.setStreet("1 rue des Lauriers");
-        addressEntity.setZipCode("33130");
-        addressEntity.setTown("Bègles");
-        propertyEntity.setAddress(addressEntity);
 
-        List<Property> properties = List.of(property);
+        LeaseContractEntity leaseContractEntity = new LeaseContractEntity();
+        leaseContractEntity.setId(idLeaseContract);
+
+        PropertyEntity propertyEntity = new PropertyEntity();
+        propertyEntity.setId(propertyId);
+        propertyEntity.setArea("90");
+        propertyEntity.setRoomsNumber("4");
+        propertyEntity.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
+        propertyEntity.setPropertyType(propertyTypeEntity);
+        propertyEntity.setAddress(addressEntity);
+        propertyEntity.setLeaseContract(leaseContractEntity);
+
         List<PropertyEntity> propertyEntityList = List.of(propertyEntity);
 
         // Vérification des propriétés
         given(propertyRepository.findAll()).willReturn(propertyEntityList);
         List<Property> propertyList = propertyService.getProperties();
-        assertEquals(propertyList.get(0).getArea(), properties.get(0).getArea());
-        assertEquals(propertyList.get(0).getRoomsNumber(), properties.get(0).getRoomsNumber());
-        assertEquals(propertyList.get(0).getDescription(), properties.get(0).getDescription());
-        assertEquals(propertyList.get(0).getType(), properties.get(0).getType());
 
-        // Vérification de l'adresse
-        Address expectedAddress = propertyList.get(0).getAddress();
-        Address actualAddress = properties.get(0).getAddress();
-        assertEquals(expectedAddress.getStreet(), actualAddress.getStreet());
-        assertEquals(expectedAddress.getZipCode(), actualAddress.getZipCode());
-        assertEquals(expectedAddress.getTown(), actualAddress.getTown());
+        Property firstProperty = propertyList.get(0);
+
+        assertEquals(propertyEntity.getArea(), firstProperty.getArea());
+        assertEquals(propertyEntity.getRoomsNumber(), firstProperty.getRoomsNumber());
+        assertEquals(propertyEntity.getDescription(), firstProperty.getDescription());
+        assertEquals(propertyEntity.getPropertyType().getName(), firstProperty.getType());
+
+        assertEquals(propertyEntity.getAddress().getStreet(), firstProperty.getAddress().getStreet());
+        assertEquals(propertyEntity.getAddress().getZipCode(), firstProperty.getAddress().getZipCode());
+        assertEquals(propertyEntity.getAddress().getTown(), firstProperty.getAddress().getTown());
+
+        assertEquals(propertyEntity.getLeaseContract().getId(), firstProperty.getLeaseContractId());
 
         verify(propertyRepository).findAll();
     }
@@ -142,18 +144,8 @@ public class PropertyServiceTest {
     @Test
     public void testGetPropertyById() throws NotFoundEntity {
         // Création d'un bien factice
-        UUID id = UUID.randomUUID();
-        Property property = new Property();
-        property.setId(id);
-        property.setArea("90");
-        property.setRoomsNumber("4");
-        property.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
-        property.setType("Maison");
-        Address address = new Address();
-        address.setStreet("1 rue des Lilas");
-        address.setZipCode("64600");
-        address.setTown("Anglet");
-        property.setAddress(address);
+        UUID propertyId = UUID.randomUUID();
+        UUID idLeaseContract = UUID.randomUUID();
 
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setStreet("1 rue des Lilas");
@@ -163,33 +155,38 @@ public class PropertyServiceTest {
         PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
         propertyTypeEntity.setName("Maison");
 
+        LeaseContractEntity leaseContractEntity = new LeaseContractEntity();
+        leaseContractEntity.setId(idLeaseContract);
+
         PropertyEntity propertyEntity = new PropertyEntity();
+        propertyEntity.setId(propertyId);
         propertyEntity.setArea("90");
         propertyEntity.setRoomsNumber("4");
         propertyEntity.setDescription("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles");
         propertyEntity.setPropertyType(propertyTypeEntity);
         propertyEntity.setAddress(addressEntity);
+        propertyEntity.setLeaseContract(leaseContractEntity);
 
         // Mock du repository pour renvoyer le bien factice
-        when(propertyRepository.findById(id)).thenReturn(Optional.of(propertyEntity));
+        when(propertyRepository.findById(propertyId)).thenReturn(Optional.of(propertyEntity));
         // Exécution de la méthode à tester
-        Property propertyById = propertyService.getPropertyById(id);
+        Property propertyById = propertyService.getPropertyById(propertyId);
 
         // Vérification du résultat
-        assertNotNull(propertyById);
-        assertEquals(id, property.getId());
-        assertEquals("90", property.getArea());
-        assertEquals("4", property.getRoomsNumber());
-        assertEquals("Maison mitoyenne de 4 pièces mesurant 90m2 située à proximité des écoles", property.getDescription());
+        assertEquals(propertyId, propertyById.getId());
+        assertEquals(propertyEntity.getArea(), propertyById.getArea());
+        assertEquals(propertyEntity.getRoomsNumber(), propertyById.getRoomsNumber());
+        assertEquals(propertyEntity.getDescription(), propertyById.getDescription());
 
-        assertNotNull(property.getType());
-        assertEquals("Maison", property.getType());
+        assertNotNull(propertyById.getType());
+        assertEquals(propertyTypeEntity.getName(), propertyById.getType());
 
-        assertNotNull(property.getAddress());
-        assertEquals("1 rue des Lilas", property.getAddress().getStreet());
-        assertEquals("64600", property.getAddress().getZipCode());
-        assertEquals("Anglet", property.getAddress().getTown());
+        assertNotNull(propertyById.getAddress());
+        assertEquals(addressEntity.getStreet(), propertyById.getAddress().getStreet());
+        assertEquals(addressEntity.getZipCode(), propertyById.getAddress().getZipCode());
+        assertEquals(addressEntity.getTown(), propertyById.getAddress().getTown());
 
+        assertEquals(leaseContractEntity.getId(), propertyById.getLeaseContractId());
     }
 
     @Test
