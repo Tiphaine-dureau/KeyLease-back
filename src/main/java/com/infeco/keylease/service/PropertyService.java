@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class PropertyService {
     private final PropertyRepository propertyRepository;
     private final AddressRepository addressRepository;
-
     private final PropertyTypeRepository propertyTypeRepository;
 
     public PropertyService(PropertyRepository propertyRepository, AddressRepository addressRepository, PropertyTypeRepository propertyTypeRepository) {
@@ -40,7 +39,7 @@ public class PropertyService {
         PropertyEntity propertyEntity = new PropertyEntity();
         propertyToEntity(property, propertyEntity);
 
-        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
+        PropertyTypeEntity propertyTypeEntity;
         Optional<PropertyTypeEntity> propertyTypeEntityOptional = this.propertyTypeRepository.findById(property.getType());
         if (propertyTypeEntityOptional.isPresent()) {
             propertyTypeEntity = propertyTypeEntityOptional.get();
@@ -93,7 +92,6 @@ public class PropertyService {
         propertyEntity.setDescription(property.getDescription());
         PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
         propertyTypeEntity.setName(property.getType());
-        propertyEntity.setPropertyType(propertyTypeEntity);
     }
 
     private void addressToEntity(Address address, AddressEntity addressEntity) {
@@ -104,21 +102,6 @@ public class PropertyService {
     }
 
     private Property entityToProperty(PropertyEntity propertyEntity) {
-        Property property = new Property();
-        Address address = new Address();
-        property.setId(propertyEntity.getId());
-        property.setArea(propertyEntity.getArea());
-        property.setRoomsNumber(propertyEntity.getRoomsNumber());
-        property.setDescription(propertyEntity.getDescription());
-
-        property.setType(propertyEntity.getPropertyType().getName());
-
-        address.setStreet(propertyEntity.getAddress().getStreet());
-        address.setAdditionalAddress(propertyEntity.getAddress().getAdditionalAddress());
-        address.setZipCode(propertyEntity.getAddress().getZipCode());
-        address.setTown(propertyEntity.getAddress().getTown());
-        property.setAddress(address);
-
-        return property;
+        return new Property(propertyEntity);
     }
 }

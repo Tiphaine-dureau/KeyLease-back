@@ -5,12 +5,12 @@ import com.infeco.keylease.entity.OwnerEntity;
 public class Owner extends Client {
     String iban;
 
-    public Owner(){
+    public Owner() {
     }
 
-    public Owner(OwnerEntity ownerEntity){
+    public Owner(OwnerEntity ownerEntity) {
         super(ownerEntity);
-        this.iban= ownerEntity.getIban();
+        this.iban = ownerEntity.getIban();
     }
 
     public String getIban() {
@@ -20,4 +20,5 @@ public class Owner extends Client {
     public void setIban(String iban) {
         this.iban = iban;
     }
+
 }
