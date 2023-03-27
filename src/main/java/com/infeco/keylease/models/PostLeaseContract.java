@@ -10,6 +10,8 @@ public class PostLeaseContract {
     UUID propertyId;
     BigDecimal rentAmount;
     BigDecimal rentCharges;
+    BigDecimal requiredDeposit;
+    BigDecimal paidDeposit;
     Date dateContractSignature;
 
     public PostLeaseContract() {
@@ -53,6 +55,22 @@ public class PostLeaseContract {
 
     public void setRentCharges(BigDecimal rentCharges) {
         this.rentCharges = rentCharges;
+    }
+
+    public BigDecimal getRequiredDeposit() {
+        return requiredDeposit;
+    }
+
+    public void setRequiredDeposit(BigDecimal requiredDeposit) {
+        this.requiredDeposit = requiredDeposit;
+    }
+
+    public BigDecimal getPaidDeposit() {
+        return paidDeposit;
+    }
+
+    public void setPaidDeposit(BigDecimal paidDeposit) {
+        this.paidDeposit = paidDeposit;
     }
 
     public Date getDateContractSignature() {

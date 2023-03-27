@@ -46,4 +46,25 @@ public class LeaseContractController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/lease-contracts/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<LeaseContract> modifyLeaseContract(@PathVariable UUID id, @RequestBody PostLeaseContract leaseContract) {
+        try {
+            return ResponseEntity.ok(this.leaseContractService.modifyLeaseContract(id, leaseContract));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/lease-contracts/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Void> deleteOwner(@PathVariable UUID id) {
+        try {
+            leaseContractService.deleteLeaseContract(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

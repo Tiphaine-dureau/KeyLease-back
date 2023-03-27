@@ -10,6 +10,8 @@ public class LeaseContract {
     UUID id;
     BigDecimal rentAmount;
     BigDecimal rentCharges;
+    BigDecimal requiredDeposit;
+    BigDecimal paidDeposit;
     Date dateContractSignature;
     Owner owner;
     Tenant tenant;
@@ -22,6 +24,8 @@ public class LeaseContract {
         this.id = leaseContractEntity.getId();
         this.rentAmount = leaseContractEntity.getRentAmount();
         this.rentCharges = leaseContractEntity.getRentCharges();
+        this.requiredDeposit = leaseContractEntity.getRequiredDeposit();
+        this.paidDeposit = leaseContractEntity.getPaidDeposit();
         this.dateContractSignature = leaseContractEntity.getDateContractSignature();
         this.owner = new Owner(leaseContractEntity.getOwner());
         this.tenant = new Tenant(leaseContractEntity.getTenant());
@@ -50,6 +54,22 @@ public class LeaseContract {
 
     public void setRentCharges(BigDecimal rentCharges) {
         this.rentCharges = rentCharges;
+    }
+
+    public BigDecimal getRequiredDeposit() {
+        return requiredDeposit;
+    }
+
+    public void setRequiredDeposit(BigDecimal requiredDeposit) {
+        this.requiredDeposit = requiredDeposit;
+    }
+
+    public BigDecimal getPaidDeposit() {
+        return paidDeposit;
+    }
+
+    public void setPaidDeposit(BigDecimal paidDeposit) {
+        this.paidDeposit = paidDeposit;
     }
 
     public Date getDateContractSignature() {

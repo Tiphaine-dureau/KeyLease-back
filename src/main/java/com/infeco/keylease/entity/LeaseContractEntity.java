@@ -20,6 +20,12 @@ public class LeaseContractEntity {
     @Column(name = "rent_charges", precision = 10, scale = 2)
     private BigDecimal rentCharges;
 
+    @Column(name = "required_deposit", precision = 10, scale = 2)
+    private BigDecimal requiredDeposit;
+
+    @Column(name = "paid_deposit", precision = 10, scale = 2)
+    private BigDecimal paidDeposit;
+
     @Column(name = "date_contract_signature")
     private Date dateContractSignature;
 
@@ -60,6 +66,22 @@ public class LeaseContractEntity {
 
     public void setRentCharges(BigDecimal rentCharges) {
         this.rentCharges = rentCharges;
+    }
+
+    public BigDecimal getRequiredDeposit() {
+        return requiredDeposit;
+    }
+
+    public void setRequiredDeposit(BigDecimal requiredDeposit) {
+        this.requiredDeposit = requiredDeposit;
+    }
+
+    public BigDecimal getPaidDeposit() {
+        return paidDeposit;
+    }
+
+    public void setPaidDeposit(BigDecimal paidDeposit) {
+        this.paidDeposit = paidDeposit;
     }
 
     public Date getDateContractSignature() {

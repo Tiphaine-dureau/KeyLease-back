@@ -62,13 +62,42 @@ public class LeaseContractService {
         leaseContractEntity.setProperty(propertyEntity);
         leaseContractEntity.setRentAmount(leaseContract.getRentAmount());
         leaseContractEntity.setRentCharges(leaseContract.getRentCharges());
+        leaseContractEntity.setRequiredDeposit(leaseContract.getRequiredDeposit());
+        leaseContractEntity.setPaidDeposit(leaseContract.getPaidDeposit());
         leaseContractEntity.setDateContractSignature(leaseContract.getDateContractSignature());
 
         LeaseContractEntity savedLeaseContractEntity = leaseContractRepository.save(leaseContractEntity);
         return new LeaseContract(savedLeaseContractEntity);
     }
 
+    public LeaseContract modifyLeaseContract(UUID leaseContractId, PostLeaseContract leaseContract) throws NotFoundEntity {
+        LeaseContractEntity leaseContractEntity = leaseContractRepository.findById(leaseContractId)
+                .orElseThrow(NotFoundEntity::new);
+        OwnerEntity ownerEntity = ownerRepository.findById(leaseContract.getOwnerId())
+                .orElseThrow(NotFoundEntity::new);
+        TenantEntity tenantEntity = tenantRepository.findById(leaseContract.getTenantId())
+                .orElseThrow(NotFoundEntity::new);
+        PropertyEntity propertyEntity = propertyRepository.findById(leaseContract.getPropertyId())
+                .orElseThrow(NotFoundEntity::new);
+        leaseContractEntity.setOwner(ownerEntity);
+        leaseContractEntity.setTenant(tenantEntity);
+        leaseContractEntity.setProperty(propertyEntity);
+        leaseContractEntity.setDateContractSignature(leaseContract.getDateContractSignature());
+        leaseContractEntity.setRentAmount(leaseContract.getRentAmount());
+        leaseContractEntity.setRentCharges(leaseContract.getRentCharges());
+        leaseContractEntity.setRequiredDeposit(leaseContract.getRequiredDeposit());
+        leaseContractEntity.setPaidDeposit(leaseContract.getPaidDeposit());
+        LeaseContractEntity savedLeaseContractEntity = leaseContractRepository.save(leaseContractEntity);
+        return new LeaseContract(savedLeaseContractEntity);
+    }
+
     private LeaseContract entityToLeaseContract(LeaseContractEntity leaseContractEntity) {
         return new LeaseContract(leaseContractEntity);
+    }
+
+    public void deleteLeaseContract(UUID id) throws NotFoundEntity {
+        LeaseContractEntity leaseContractEntity = leaseContractRepository.findById(id)
+                .orElseThrow(NotFoundEntity::new);
+        this.leaseContractRepository.delete(leaseContractEntity);
     }
 }
