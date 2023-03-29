@@ -46,4 +46,25 @@ public class FixtureInventoryController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/fixtures-inventory/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<FixtureInventory> updateFixtureInventory(@PathVariable UUID id, @RequestBody PostFixtureInventory fixtureInventory) {
+        try {
+            return ResponseEntity.ok(this.fixtureInventoryService.updateFixtureInventory(id, fixtureInventory));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/fixtures-inventory/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<FixtureInventory> deleteFixtureInventory(@PathVariable UUID id) {
+        try {
+            fixtureInventoryService.deleteFixtureInventory(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

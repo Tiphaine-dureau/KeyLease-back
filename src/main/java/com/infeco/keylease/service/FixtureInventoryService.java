@@ -24,10 +24,12 @@ public class FixtureInventoryService {
         this.propertyRepository = propertyRepository;
     }
 
+    // GET ALL
     public List<FixtureInventory> getFixturesInventory() {
         return this.fixtureInventoryRepository.findAll().stream().map(FixtureInventory::new).collect(Collectors.toList());
     }
 
+    // GET BY ID
     public FixtureInventory getFixtureInventoryById(UUID id) throws NotFoundEntity {
         Optional<FixtureInventoryEntity> optionalFixtureInventoryEntity = this.fixtureInventoryRepository.findById(id);
         if (optionalFixtureInventoryEntity.isPresent()) {
@@ -37,19 +39,54 @@ public class FixtureInventoryService {
         }
     }
 
+    // POST
     public FixtureInventory addFixtureInventory(PostFixtureInventory fixtureInventory) throws NotFoundEntity {
-        PropertyEntity propertyEntity = propertyRepository.findById(fixtureInventory.getPropertyId())
-                .orElseThrow(NotFoundEntity::new);
+        PropertyEntity propertyEntity = getPropertyEntityOrThrow(fixtureInventory.getPropertyId());
+        FixtureInventoryEntity fixtureInventoryEntity = createFixtureInventoryEntity(fixtureInventory, propertyEntity);
+        FixtureInventoryEntity savedFixtureInventoryEntity = fixtureInventoryRepository.save(fixtureInventoryEntity);
+        return new FixtureInventory(savedFixtureInventoryEntity);
+    }
 
+    // PUT
+    public FixtureInventory updateFixtureInventory(UUID fixtureInventoryId, PostFixtureInventory fixtureInventory) throws NotFoundEntity {
+        FixtureInventoryEntity fixtureInventoryEntity = getFixtureInventoryEntityOrThrow(fixtureInventoryId);
+        PropertyEntity propertyEntity = getPropertyEntityOrThrow(fixtureInventory.getPropertyId());
+        fixtureInventoryEntity.setProperty(propertyEntity);
+        modifyFixtureInventoryEntity(fixtureInventory, fixtureInventoryEntity);
+        FixtureInventoryEntity savedFixtureInventoryEntity = fixtureInventoryRepository.save(fixtureInventoryEntity);
+        return new FixtureInventory(savedFixtureInventoryEntity);
+    }
+
+    // DELETE
+    public void deleteFixtureInventory(UUID id) throws NotFoundEntity {
+        FixtureInventoryEntity fixtureInventoryEntity = fixtureInventoryRepository.findById(id)
+                .orElseThrow(NotFoundEntity::new);
+        this.fixtureInventoryRepository.delete(fixtureInventoryEntity);
+    }
+
+    // METHODS
+    private PropertyEntity getPropertyEntityOrThrow(UUID propertyId) throws NotFoundEntity {
+        return propertyRepository.findById(propertyId)
+                .orElseThrow(NotFoundEntity::new);
+    }
+
+    private FixtureInventoryEntity getFixtureInventoryEntityOrThrow(UUID fixtureInventoryId) throws NotFoundEntity {
+        return fixtureInventoryRepository.findById(fixtureInventoryId)
+                .orElseThrow(NotFoundEntity::new);
+    }
+
+    private FixtureInventoryEntity createFixtureInventoryEntity(PostFixtureInventory fixtureInventory, PropertyEntity propertyEntity) {
         FixtureInventoryEntity fixtureInventoryEntity = new FixtureInventoryEntity();
         fixtureInventoryEntity.setProperty(propertyEntity);
+        modifyFixtureInventoryEntity(fixtureInventory, fixtureInventoryEntity);
+        return fixtureInventoryEntity;
+    }
+
+    private void modifyFixtureInventoryEntity(PostFixtureInventory fixtureInventory, FixtureInventoryEntity fixtureInventoryEntity) {
         fixtureInventoryEntity.setArrivalFixtureInventoryDate(fixtureInventory.getArrivalFixtureInventoryDate());
         fixtureInventoryEntity.setArrivalComments(fixtureInventory.getArrivalComments());
         fixtureInventoryEntity.setExitFixtureInventoryDate(fixtureInventory.getExitFixtureInventoryDate());
         fixtureInventoryEntity.setExitComments(fixtureInventory.getExitComments());
-
-        FixtureInventoryEntity savedFixtureInventoryEntity = fixtureInventoryRepository.save(fixtureInventoryEntity);
-        return new FixtureInventory(savedFixtureInventoryEntity);
     }
 
     private FixtureInventory entityToFixtureInventory(FixtureInventoryEntity fixtureInventoryEntity) {
