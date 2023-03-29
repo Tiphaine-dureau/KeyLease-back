@@ -15,6 +15,10 @@ Nomenclature :
 
 #### Added
 
+### [0.1.1] - 2023-03-29
+
+#### Added
+
 - Added GET /fixtures-inventory
 - Added fixture-inventory table with some data (014)
 - Added GET /fixtures-inventory/:id
@@ -22,6 +26,9 @@ Nomenclature :
 - Added PUT /fixtures-inventory/:id
 - Added DELETE /fixtures-inventory/:id
 - Added unit test for method getFixtureInventoryById() of the service
+
+#### Updated
+
 - Updated unit property test to integrate fixture inventory id
 
 ### [0.1.0] - 2023-03-27
