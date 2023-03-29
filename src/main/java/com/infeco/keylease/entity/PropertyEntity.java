@@ -38,6 +38,9 @@ public class PropertyEntity {
     @OneToOne(mappedBy = "property")
     private LeaseContractEntity leaseContract;
 
+    @OneToOne(mappedBy = "property")
+    private FixtureInventoryEntity fixtureInventory;
+
     public PropertyEntity() {
     }
 
@@ -96,4 +99,13 @@ public class PropertyEntity {
     public void setLeaseContract(LeaseContractEntity leaseContract) {
         this.leaseContract = leaseContract;
     }
+
+    public FixtureInventoryEntity getFixtureInventory() {
+        return fixtureInventory;
+    }
+
+    public void setFixtureInventory(FixtureInventoryEntity fixtureInventory) {
+        this.fixtureInventory = fixtureInventory;
+    }
 }
+

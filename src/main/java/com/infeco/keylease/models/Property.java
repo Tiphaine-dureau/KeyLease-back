@@ -12,6 +12,7 @@ public class Property {
     Address address;
     String type;
     UUID leaseContractId;
+    UUID fixtureInventoryId;
 
     public Property() {
     }
@@ -24,6 +25,7 @@ public class Property {
         this.type = propertyEntity.getPropertyType().getName();
         this.address = new Address(propertyEntity.getAddress());
         this.leaseContractId = propertyEntity.getLeaseContract() != null ? propertyEntity.getLeaseContract().getId() : null;
+        this.fixtureInventoryId = propertyEntity.getFixtureInventory() != null ? propertyEntity.getFixtureInventory().getId() : null;
     }
 
     public UUID getId() {
@@ -80,5 +82,13 @@ public class Property {
 
     public void setLeaseContractId(UUID leaseContractId) {
         this.leaseContractId = leaseContractId;
+    }
+
+    public UUID getFixtureInventoryId() {
+        return fixtureInventoryId;
+    }
+
+    public void setFixtureInventoryId(UUID fixtureInventoryId) {
+        this.fixtureInventoryId = fixtureInventoryId;
     }
 }
