@@ -1,9 +1,6 @@
 package com.infeco.keylease;
 
-import com.infeco.keylease.entity.AddressEntity;
-import com.infeco.keylease.entity.LeaseContractEntity;
-import com.infeco.keylease.entity.PropertyEntity;
-import com.infeco.keylease.entity.PropertyTypeEntity;
+import com.infeco.keylease.entity.*;
 import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Property;
@@ -49,6 +46,7 @@ public class PropertyServiceTest {
         // Création d'un bien factice
         UUID propertyId = UUID.randomUUID();
         UUID idLeaseContract = UUID.randomUUID();
+        UUID idFixtureInventory = UUID.randomUUID();
 
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setStreet("1 rue des Lilas");
@@ -61,6 +59,9 @@ public class PropertyServiceTest {
         LeaseContractEntity leaseContractEntity = new LeaseContractEntity();
         leaseContractEntity.setId(idLeaseContract);
 
+        FixtureInventoryEntity fixtureInventoryEntity = new FixtureInventoryEntity();
+        fixtureInventoryEntity.setId(idFixtureInventory);
+
         PropertyEntity propertyEntity = new PropertyEntity();
         propertyEntity.setId(propertyId);
         propertyEntity.setArea("90");
@@ -69,6 +70,7 @@ public class PropertyServiceTest {
         propertyEntity.setPropertyType(propertyTypeEntity);
         propertyEntity.setAddress(addressEntity);
         propertyEntity.setLeaseContract(leaseContractEntity);
+        propertyEntity.setFixtureInventory(fixtureInventoryEntity);
 
         List<PropertyEntity> propertyEntityList = List.of(propertyEntity);
 
@@ -88,6 +90,7 @@ public class PropertyServiceTest {
         assertEquals(propertyEntity.getAddress().getTown(), firstProperty.getAddress().getTown());
 
         assertEquals(propertyEntity.getLeaseContract().getId(), firstProperty.getLeaseContractId());
+        assertEquals(propertyEntity.getFixtureInventory().getId(), firstProperty.getFixtureInventoryId());
 
         verify(propertyRepository).findAll();
     }
@@ -146,6 +149,7 @@ public class PropertyServiceTest {
         // Création d'un bien factice
         UUID propertyId = UUID.randomUUID();
         UUID idLeaseContract = UUID.randomUUID();
+        UUID idFixtureInventory = UUID.randomUUID();
 
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setStreet("1 rue des Lilas");
@@ -158,6 +162,9 @@ public class PropertyServiceTest {
         LeaseContractEntity leaseContractEntity = new LeaseContractEntity();
         leaseContractEntity.setId(idLeaseContract);
 
+        FixtureInventoryEntity fixtureInventoryEntity = new FixtureInventoryEntity();
+        fixtureInventoryEntity.setId(idFixtureInventory);
+
         PropertyEntity propertyEntity = new PropertyEntity();
         propertyEntity.setId(propertyId);
         propertyEntity.setArea("90");
@@ -166,6 +173,7 @@ public class PropertyServiceTest {
         propertyEntity.setPropertyType(propertyTypeEntity);
         propertyEntity.setAddress(addressEntity);
         propertyEntity.setLeaseContract(leaseContractEntity);
+        propertyEntity.setFixtureInventory(fixtureInventoryEntity);
 
         // Mock du repository pour renvoyer le bien factice
         when(propertyRepository.findById(propertyId)).thenReturn(Optional.of(propertyEntity));
@@ -187,6 +195,7 @@ public class PropertyServiceTest {
         assertEquals(addressEntity.getTown(), propertyById.getAddress().getTown());
 
         assertEquals(leaseContractEntity.getId(), propertyById.getLeaseContractId());
+        assertEquals(fixtureInventoryEntity.getId(), propertyById.getFixtureInventoryId());
     }
 
     @Test
