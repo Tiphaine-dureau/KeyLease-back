@@ -16,4 +16,5 @@
     <include file="db/changelog/changes/011-create-table-type.sql"/>
     <include file="db/changelog/changes/012-create-table-property_type.sql"/>
     <include file="db/changelog/changes/013-create-table-lease-contract.sql"/>
+    <include file="/db/changelog/changes/014-create-table-fixture-inventory.sql"/>
 </databaseChangeLog>
