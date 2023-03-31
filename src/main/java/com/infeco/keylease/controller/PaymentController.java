@@ -36,6 +36,12 @@ public class PaymentController {
         }
     }
 
+    @GetMapping("/payments/lease-contract/{leaseContractId}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public List<Payment> getPaymentsByLeaseContractId(@PathVariable UUID leaseContractId) {
+        return this.paymentService.getPaymentsByLeaseContractId(leaseContractId);
+    }
+
     @PostMapping("/payments")
     @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
     public ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {

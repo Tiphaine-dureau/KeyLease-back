@@ -39,6 +39,11 @@ public class PaymentService {
         }
     }
 
+    // GET ALL PAYMENTS BY LEASE CONTRACT ID
+    public List<Payment> getPaymentsByLeaseContractId(UUID leaseContractId) {
+        return paymentRepository.findAllByLeaseContractId(leaseContractId).stream().map(Payment::new).collect(Collectors.toList());
+    }
+
     // POST
     public Payment addPayment(Payment payment) throws NotFoundEntity {
         LeaseContractEntity leaseContractEntity = leaseContractRepository.findById(payment.getLeaseContractId())
