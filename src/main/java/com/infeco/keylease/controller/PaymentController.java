@@ -7,9 +7,7 @@ import com.infeco.keylease.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +31,37 @@ public class PaymentController {
     public ResponseEntity<Payment> getPaymentById(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok(this.paymentService.getPaymentById(id));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/payments")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {
+        try {
+            return ResponseEntity.ok(this.paymentService.addPayment(payment));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/payments/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Payment> updatePayment(@PathVariable UUID id, @RequestBody Payment payment) {
+        try {
+            return ResponseEntity.ok(this.paymentService.updatePayment(id, payment));
+        } catch (NotFoundEntity e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/payments/{id}")
+    @PreAuthorize("hasAuthority('" + AuthoritiesConstants.USER + "')")
+    public ResponseEntity<Void> deletePayment(@PathVariable UUID id) {
+        try {
+            paymentService.deletePayment(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (NotFoundEntity e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

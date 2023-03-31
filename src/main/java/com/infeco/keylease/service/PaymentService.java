@@ -1,8 +1,10 @@
 package com.infeco.keylease.service;
 
+import com.infeco.keylease.entity.LeaseContractEntity;
 import com.infeco.keylease.entity.PaymentEntity;
 import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Payment;
+import com.infeco.keylease.repository.LeaseContractRepository;
 import com.infeco.keylease.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class PaymentService {
     private final PaymentRepository paymentRepository;
+    private final LeaseContractRepository leaseContractRepository;
 
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository,
+                          LeaseContractRepository leaseContractRepository) {
         this.paymentRepository = paymentRepository;
+        this.leaseContractRepository = leaseContractRepository;
     }
 
     // GET ALL
@@ -32,6 +37,40 @@ public class PaymentService {
         } else {
             throw new NotFoundEntity();
         }
+    }
+
+    // POST
+    public Payment addPayment(Payment payment) throws NotFoundEntity {
+        LeaseContractEntity leaseContractEntity = leaseContractRepository.findById(payment.getLeaseContractId())
+                .orElseThrow(NotFoundEntity::new);
+        PaymentEntity paymentEntity = new PaymentEntity();
+        paymentEntity.setLeaseContract(leaseContractEntity);
+        paymentEntity.setRentPaymentDate(payment.getRentPaymentDate());
+        paymentEntity.setPaidRent(payment.getPaidRent());
+
+        PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
+        return new Payment(savedPaymentEntity);
+    }
+
+    // PUT
+    public Payment updatePayment(UUID paymentId, Payment payment) throws NotFoundEntity {
+        PaymentEntity paymentEntity = paymentRepository.findById(paymentId)
+                .orElseThrow(NotFoundEntity::new);
+        LeaseContractEntity leaseContractEntity = leaseContractRepository.findById(payment.getLeaseContractId())
+                .orElseThrow(NotFoundEntity::new);
+        paymentEntity.setLeaseContract(leaseContractEntity);
+        paymentEntity.setRentPaymentDate(payment.getRentPaymentDate());
+        paymentEntity.setPaidRent(payment.getPaidRent());
+
+        PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
+        return new Payment(savedPaymentEntity);
+    }
+
+    // DELETE
+    public void deletePayment(UUID id) throws NotFoundEntity {
+        PaymentEntity paymentEntity = paymentRepository.findById(id)
+                .orElseThrow(NotFoundEntity::new);
+        this.paymentRepository.delete(paymentEntity);
     }
 
     // METHODS
