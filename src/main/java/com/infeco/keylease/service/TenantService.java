@@ -74,6 +74,7 @@ public class TenantService {
     private void tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
+        tenantEntity.setBirthday(tenant.getBirthday());
         tenantEntity.setEmail(tenant.getEmail());
         tenantEntity.setPhoneNumber(tenant.getPhoneNumber());
         tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());

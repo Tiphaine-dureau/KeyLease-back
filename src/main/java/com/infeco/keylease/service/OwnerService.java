@@ -73,6 +73,7 @@ public class OwnerService {
     private void ownerToEntity(Owner owner, OwnerEntity ownerEntity) {
         ownerEntity.setFirstName(owner.getFirstName());
         ownerEntity.setLastName(owner.getLastName());
+        ownerEntity.setBirthday(owner.getBirthday());
         ownerEntity.setEmail(owner.getEmail());
         ownerEntity.setPhoneNumber(owner.getPhoneNumber());
         ownerEntity.setIban(owner.getIban());
@@ -86,21 +87,6 @@ public class OwnerService {
     }
 
     private Owner entityToOwner(OwnerEntity ownerEntity) {
-        Owner owner = new Owner();
-        Address address = new Address();
-        owner.setId(ownerEntity.getId());
-        owner.setFirstName(ownerEntity.getFirstName());
-        owner.setLastName(ownerEntity.getLastName());
-        owner.setEmail(ownerEntity.getEmail());
-        owner.setPhoneNumber(ownerEntity.getPhoneNumber());
-        owner.setIban(ownerEntity.getIban());
-
-        address.setStreet(ownerEntity.getAddress().getStreet());
-        address.setAdditionalAddress(ownerEntity.getAddress().getAdditionalAddress());
-        address.setZipCode(ownerEntity.getAddress().getZipCode());
-        address.setTown(ownerEntity.getAddress().getTown());
-        owner.setAddress(address);
-
-        return owner;
+        return new Owner(ownerEntity);
     }
 }
