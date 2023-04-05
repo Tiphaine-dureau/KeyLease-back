@@ -15,6 +15,14 @@ Nomenclature :
 
 #### Added
 
+- Added GET /payments
+- Added payment table with some data (015)
+- Added GET /payments/lease-contract/:id
+- Added GET /payment/:id
+- Added POST /payments
+- Added PUT /payment/:id
+- Added DELETE /payment/:id
+
 ### [0.1.1] - 2023-03-29
 
 #### Added
