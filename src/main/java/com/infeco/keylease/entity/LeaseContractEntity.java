@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -40,6 +42,9 @@ public class LeaseContractEntity {
     @OneToOne
     @JoinColumn(name = "property_id", referencedColumnName = "id")
     private PropertyEntity property;
+
+    @OneToMany(mappedBy = "leaseContract", cascade = CascadeType.REMOVE)
+    private Set<PaymentEntity> payments;
 
     public LeaseContractEntity() {
     }
@@ -115,4 +120,16 @@ public class LeaseContractEntity {
     public void setProperty(PropertyEntity property) {
         this.property = property;
     }
+
+    public Set<PaymentEntity> getPayments() {
+        if (payments == null) {
+            payments = new HashSet<>();
+        }
+        return payments;
+    }
+
+    public void setPayments(Set<PaymentEntity> payments) {
+        this.payments = payments;
+    }
+
 }

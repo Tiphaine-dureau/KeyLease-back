@@ -1,11 +1,17 @@
 package com.infeco.keylease.models;
 
+import com.infeco.keylease.entity.LeaseContractEntity;
 import com.infeco.keylease.entity.TenantEntity;
+
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Tenant extends Client {
     String partnerLastName;
     String partnerFirstName;
     String partnerPhoneNumber;
+    Set<UUID> leaseContractIdList;
 
     public Tenant() {
     }
@@ -15,6 +21,7 @@ public class Tenant extends Client {
         this.partnerLastName = tenantEntity.getPartnerLastName();
         this.partnerFirstName = tenantEntity.getPartnerFirstName();
         this.partnerPhoneNumber = tenantEntity.getPartnerPhoneNumber();
+        this.leaseContractIdList = tenantEntity.getLeaseContracts().stream().map(LeaseContractEntity::getId).collect(Collectors.toSet());
     }
 
     public String getPartnerLastName() {
@@ -39,5 +46,13 @@ public class Tenant extends Client {
 
     public void setPartnerPhoneNumber(String partnerPhoneNumber) {
         this.partnerPhoneNumber = partnerPhoneNumber;
+    }
+
+    public Set<UUID> getLeaseContractIdList() {
+        return leaseContractIdList;
+    }
+
+    public void setLeaseContractIdList(Set<UUID> leaseContractIdList) {
+        this.leaseContractIdList = leaseContractIdList;
     }
 }

@@ -1,9 +1,8 @@
 package com.infeco.keylease.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
 @DiscriminatorValue("T")
@@ -18,6 +17,10 @@ public class TenantEntity extends ClientEntity {
 
     @Column(name = "partner_phone_number")
     private String partnerPhoneNumber;
+
+    @OneToMany(mappedBy = "tenant")
+    private Set<LeaseContractEntity> leaseContracts;
+
 
     public TenantEntity() {
     }
@@ -44,5 +47,13 @@ public class TenantEntity extends ClientEntity {
 
     public void setPartnerPhoneNumber(String partnerPhoneNumber) {
         this.partnerPhoneNumber = partnerPhoneNumber;
+    }
+
+    public Set<LeaseContractEntity> getLeaseContracts() {
+        return leaseContracts;
+    }
+
+    public void setLeaseContracts(Set<LeaseContractEntity> leaseContracts) {
+        this.leaseContracts = leaseContracts;
     }
 }
