@@ -43,7 +43,7 @@ public class LeaseContractEntity {
     @JoinColumn(name = "property_id", referencedColumnName = "id")
     private PropertyEntity property;
 
-    @OneToMany(mappedBy = "leaseContract")
+    @OneToMany(mappedBy = "leaseContract", cascade = CascadeType.REMOVE)
     private Set<PaymentEntity> payments;
 
     public LeaseContractEntity() {
