@@ -74,6 +74,7 @@ public class TenantService {
     private void tenantToEntity(Tenant tenant, TenantEntity tenantEntity) {
         tenantEntity.setFirstName(tenant.getFirstName());
         tenantEntity.setLastName(tenant.getLastName());
+        tenantEntity.setBirthday(tenant.getBirthday());
         tenantEntity.setEmail(tenant.getEmail());
         tenantEntity.setPhoneNumber(tenant.getPhoneNumber());
         tenantEntity.setPartnerFirstName(tenant.getPartnerFirstName());
@@ -89,21 +90,6 @@ public class TenantService {
     }
 
     private Tenant entityToTenant(TenantEntity tenantEntity) {
-        Tenant tenant = new Tenant();
-        Address address = new Address();
-        tenant.setId(tenantEntity.getId());
-        tenant.setFirstName(tenantEntity.getFirstName());
-        tenant.setLastName(tenantEntity.getLastName());
-        tenant.setEmail(tenantEntity.getEmail());
-        tenant.setPhoneNumber(tenantEntity.getPhoneNumber());
-        tenant.setPartnerFirstName(tenantEntity.getPartnerFirstName());
-        tenant.setPartnerLastName(tenantEntity.getPartnerLastName());
-        tenant.setPartnerPhoneNumber(tenantEntity.getPartnerPhoneNumber());
-        address.setStreet(tenantEntity.getAddress().getStreet());
-        address.setAdditionalAddress(tenantEntity.getAddress().getAdditionalAddress());
-        address.setZipCode(tenantEntity.getAddress().getZipCode());
-        address.setTown(tenantEntity.getAddress().getTown());
-        tenant.setAddress(address);
-        return tenant;
+        return new Tenant(tenantEntity);
     }
 }

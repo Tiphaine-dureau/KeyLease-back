@@ -4,7 +4,9 @@ import com.infeco.keylease.entity.LeaseContractEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class LeaseContract {
     UUID id;
@@ -16,6 +18,7 @@ public class LeaseContract {
     Owner owner;
     Tenant tenant;
     Property property;
+    Set<Payment> payments;
 
     public LeaseContract() {
     }
@@ -30,6 +33,7 @@ public class LeaseContract {
         this.owner = new Owner(leaseContractEntity.getOwner());
         this.tenant = new Tenant(leaseContractEntity.getTenant());
         this.property = new Property(leaseContractEntity.getProperty());
+        this.payments = leaseContractEntity.getPayments().stream().map(Payment::new).collect(Collectors.toSet());
     }
 
     public UUID getId() {
@@ -102,5 +106,13 @@ public class LeaseContract {
 
     public void setProperty(Property property) {
         this.property = property;
+    }
+
+    public Set<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Set<Payment> payments) {
+        this.payments = payments;
     }
 }
