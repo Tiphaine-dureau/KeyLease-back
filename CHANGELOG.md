@@ -15,6 +15,12 @@ Nomenclature :
 
 #### Added
 
+### [0.1.3] - 2023-04-12
+
+#### Fixed
+
+- BF when delete entities witch are link by a contract or an inventory
+
 ### [0.1.2] - 2023-04-05
 
 #### Added
