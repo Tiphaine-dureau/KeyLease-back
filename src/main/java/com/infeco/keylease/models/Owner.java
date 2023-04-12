@@ -1,9 +1,15 @@
 package com.infeco.keylease.models;
 
+import com.infeco.keylease.entity.LeaseContractEntity;
 import com.infeco.keylease.entity.OwnerEntity;
+
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class Owner extends Client {
     String iban;
+    Set<UUID> leaseContractIdList;
 
     public Owner() {
     }
@@ -11,6 +17,7 @@ public class Owner extends Client {
     public Owner(OwnerEntity ownerEntity) {
         super(ownerEntity);
         this.iban = ownerEntity.getIban();
+        this.leaseContractIdList = ownerEntity.getLeaseContracts().stream().map(LeaseContractEntity::getId).collect(Collectors.toSet());
     }
 
     public String getIban() {
@@ -21,4 +28,11 @@ public class Owner extends Client {
         this.iban = iban;
     }
 
+    public Set<UUID> getLeaseContractIdList() {
+        return leaseContractIdList;
+    }
+
+    public void setLeaseContractIdList(Set<UUID> leaseContractIdList) {
+        this.leaseContractIdList = leaseContractIdList;
+    }
 }
