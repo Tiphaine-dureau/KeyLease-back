@@ -2,6 +2,7 @@ package com.infeco.keylease.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,9 +19,8 @@ public class TenantEntity extends ClientEntity {
     @Column(name = "partner_phone_number")
     private String partnerPhoneNumber;
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
     private Set<LeaseContractEntity> leaseContracts;
-
 
     public TenantEntity() {
     }
@@ -50,6 +50,9 @@ public class TenantEntity extends ClientEntity {
     }
 
     public Set<LeaseContractEntity> getLeaseContracts() {
+        if (leaseContracts == null) {
+            leaseContracts = new HashSet<>();
+        }
         return leaseContracts;
     }
 

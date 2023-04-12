@@ -35,10 +35,10 @@ public class PropertyEntity {
     )
     private PropertyTypeEntity propertyType;
 
-    @OneToOne(mappedBy = "property")
+    @OneToOne(mappedBy = "property", cascade = CascadeType.REMOVE)
     private LeaseContractEntity leaseContract;
 
-    @OneToOne(mappedBy = "property")
+    @OneToOne(mappedBy = "property", cascade = CascadeType.REMOVE)
     private FixtureInventoryEntity fixtureInventory;
 
     public PropertyEntity() {
