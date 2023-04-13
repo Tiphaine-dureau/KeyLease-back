@@ -28,6 +28,9 @@ public class LeaseContractEntity {
     @Column(name = "paid_deposit", precision = 10, scale = 2)
     private BigDecimal paidDeposit;
 
+    @Column(name = "expected_amount_from_caf_to_owner", precision = 10, scale = 2)
+    private BigDecimal expectedAmountFromCafToOwner;
+
     @Column(name = "date_contract_signature")
     private Date dateContractSignature;
 
@@ -87,6 +90,14 @@ public class LeaseContractEntity {
 
     public void setPaidDeposit(BigDecimal paidDeposit) {
         this.paidDeposit = paidDeposit;
+    }
+
+    public BigDecimal getExpectedAmountFromCafToOwner() {
+        return expectedAmountFromCafToOwner;
+    }
+
+    public void setExpectedAmountFromCafToOwner(BigDecimal expectedAmountFromCafToOwner) {
+        this.expectedAmountFromCafToOwner = expectedAmountFromCafToOwner;
     }
 
     public Date getDateContractSignature() {

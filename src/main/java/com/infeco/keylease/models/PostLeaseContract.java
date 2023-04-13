@@ -12,6 +12,7 @@ public class PostLeaseContract {
     BigDecimal rentCharges;
     BigDecimal requiredDeposit;
     BigDecimal paidDeposit;
+    BigDecimal expectedAmountFromCafToOwner;
     Date dateContractSignature;
 
     public PostLeaseContract() {
@@ -71,6 +72,14 @@ public class PostLeaseContract {
 
     public void setPaidDeposit(BigDecimal paidDeposit) {
         this.paidDeposit = paidDeposit;
+    }
+
+    public BigDecimal getExpectedAmountFromCafToOwner() {
+        return expectedAmountFromCafToOwner;
+    }
+
+    public void setExpectedAmountFromCafToOwner(BigDecimal expectedAmountFromCafToOwner) {
+        this.expectedAmountFromCafToOwner = expectedAmountFromCafToOwner;
     }
 
     public Date getDateContractSignature() {
