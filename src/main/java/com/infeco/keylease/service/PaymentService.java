@@ -52,6 +52,7 @@ public class PaymentService {
         paymentEntity.setLeaseContract(leaseContractEntity);
         paymentEntity.setRentPaymentDate(payment.getRentPaymentDate());
         paymentEntity.setPaidRent(payment.getPaidRent());
+        paymentEntity.setAmountPaidFromCafToOwner(payment.getAmountPaidFromCafToOwner());
 
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
         return new Payment(savedPaymentEntity);
@@ -66,6 +67,7 @@ public class PaymentService {
         paymentEntity.setLeaseContract(leaseContractEntity);
         paymentEntity.setRentPaymentDate(payment.getRentPaymentDate());
         paymentEntity.setPaidRent(payment.getPaidRent());
+        paymentEntity.setAmountPaidFromCafToOwner(payment.getAmountPaidFromCafToOwner());
 
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
         return new Payment(savedPaymentEntity);

@@ -10,6 +10,7 @@ public class Payment {
     UUID id;
     BigDecimal paidRent;
     Date rentPaymentDate;
+    BigDecimal amountPaidFromCafToOwner;
     UUID leaseContractId;
 
     public Payment() {
@@ -19,6 +20,7 @@ public class Payment {
         this.id = paymentEntity.getId();
         this.paidRent = paymentEntity.getPaidRent();
         this.rentPaymentDate = paymentEntity.getRentPaymentDate();
+        this.amountPaidFromCafToOwner = paymentEntity.getAmountPaidFromCafToOwner();
         this.leaseContractId = paymentEntity.getLeaseContract() != null ? paymentEntity.getLeaseContract().getId() : null;
     }
 
@@ -44,6 +46,14 @@ public class Payment {
 
     public void setRentPaymentDate(Date rentPaymentDate) {
         this.rentPaymentDate = rentPaymentDate;
+    }
+
+    public BigDecimal getAmountPaidFromCafToOwner() {
+        return amountPaidFromCafToOwner;
+    }
+
+    public void setAmountPaidFromCafToOwner(BigDecimal amountPaidFromCafToOwner) {
+        this.amountPaidFromCafToOwner = amountPaidFromCafToOwner;
     }
 
     public UUID getLeaseContractId() {
