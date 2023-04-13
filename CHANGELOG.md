@@ -15,6 +15,9 @@ Nomenclature :
 
 #### Added
 
+- Added rentalManagementFees entity - model and service
+- Added rental_management_fees table (liquibase) : 016
+
 ### [0.1.4] - 2023-04-13
 
 #### Added
