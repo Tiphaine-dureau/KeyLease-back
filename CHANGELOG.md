@@ -15,6 +15,10 @@ Nomenclature :
 
 #### Added
 
+### [0.1.4] - 2023-04-13
+
+#### Added
+
 - Added expectedAmountFromCafToOwner in LeaseContract
 - Added amountPaidFromCafToOwner in Payment
 - Updated tables lease_contract and payment (liquibase)
