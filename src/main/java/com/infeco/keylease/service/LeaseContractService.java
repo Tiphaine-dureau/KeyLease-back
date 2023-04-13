@@ -64,6 +64,7 @@ public class LeaseContractService {
         leaseContractEntity.setRentCharges(leaseContract.getRentCharges());
         leaseContractEntity.setRequiredDeposit(leaseContract.getRequiredDeposit());
         leaseContractEntity.setPaidDeposit(leaseContract.getPaidDeposit());
+        leaseContractEntity.setExpectedAmountFromCafToOwner(leaseContract.getExpectedAmountFromCafToOwner());
         leaseContractEntity.setDateContractSignature(leaseContract.getDateContractSignature());
 
         LeaseContractEntity savedLeaseContractEntity = leaseContractRepository.save(leaseContractEntity);
@@ -87,6 +88,7 @@ public class LeaseContractService {
         leaseContractEntity.setRentCharges(leaseContract.getRentCharges());
         leaseContractEntity.setRequiredDeposit(leaseContract.getRequiredDeposit());
         leaseContractEntity.setPaidDeposit(leaseContract.getPaidDeposit());
+        leaseContractEntity.setExpectedAmountFromCafToOwner(leaseContract.getExpectedAmountFromCafToOwner());
         LeaseContractEntity savedLeaseContractEntity = leaseContractRepository.save(leaseContractEntity);
         return new LeaseContract(savedLeaseContractEntity);
     }

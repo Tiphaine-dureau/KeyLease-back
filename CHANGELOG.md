@@ -4,7 +4,7 @@ Les changements notables du projet sont notés dans ce fichier.
 Nomenclature :
 
 - Added : pour les nouvelles fonctionnalités
-- Changed : pour les changements de fonctionnalités existantes
+- Updated : pour les changements de fonctionnalités existantes
 - Deprecated : pour les fonctionnalités qui seront bientôt supprimées
 - Removed : pour les fonctionnalités supprimées
 - Fixed : pour les corrections de bugs
@@ -14,6 +14,14 @@ Nomenclature :
 ### Unreleased
 
 #### Added
+
+### [0.1.4] - 2023-04-13
+
+#### Added
+
+- Added expectedAmountFromCafToOwner in LeaseContract
+- Added amountPaidFromCafToOwner in Payment
+- Updated tables lease_contract and payment (liquibase)
 
 ### [0.1.3] - 2023-04-12
 
