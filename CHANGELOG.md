@@ -15,8 +15,15 @@ Nomenclature :
 
 #### Added
 
+### [0.1.5] - 2023-04-14
+
+#### Added
+
 - Added rentalManagementFees entity - model and service
 - Added rental_management_fees table (liquibase) : 016
+
+#### Updated
+
 - Updated Owner model to add expectedRentAmount and balance
 - Updated Owner service to calculate the expectedRentAmount and the balance minus rentalFeesManagement
 
