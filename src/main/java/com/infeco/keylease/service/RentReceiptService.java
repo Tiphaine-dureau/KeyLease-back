@@ -104,7 +104,7 @@ public class RentReceiptService {
             document.add(leagcyDiv);
 
             // SIGNATURE
-            Image signatureImage = new Image(ImageDataFactory.create("src/main/resources/static/Signature.png"))
+            Image signatureImage = new Image(ImageDataFactory.create("target/classes/static/Signature.png"))
                     .setWidth(150)
                     .setHeight(150)
                     .setMarginTop(10)
