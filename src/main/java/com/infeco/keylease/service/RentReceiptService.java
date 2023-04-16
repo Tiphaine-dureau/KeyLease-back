@@ -3,13 +3,15 @@ package com.infeco.keylease.service;
 import com.infeco.keylease.models.LeaseContract;
 import com.infeco.keylease.models.Payment;
 import com.itextpdf.io.font.constants.StandardFonts;
-import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Div;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.stereotype.Service;
 
@@ -104,12 +106,13 @@ public class RentReceiptService {
             document.add(leagcyDiv);
 
             // SIGNATURE
-            Image signatureImage = new Image(ImageDataFactory.create("target/classes/static/Signature.png"))
-                    .setWidth(150)
-                    .setHeight(150)
-                    .setMarginTop(10)
-                    .setMarginLeft(350);
-            document.add(signatureImage);
+            Div signature = new Div()
+                    .add(new Paragraph("L'agence")
+                            .setMarginLeft(400)
+                            .setMarginTop(20)
+                            .setBold()
+                            .setItalic());
+            document.add(signature);
 
             // CLOSE
             document.close();
