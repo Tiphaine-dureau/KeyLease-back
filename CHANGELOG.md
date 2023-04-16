@@ -15,7 +15,9 @@ Nomenclature :
 
 ### [0.1.7] - 2023-04-16
 
-#### Fixed : signature image is not read in prod ->  updated to simple text
+#### Fixed
+
+-Fixed signature image is not read in prod ->  updated to simple text
 
 ### [0.1.6] - 2023-04-16
 
