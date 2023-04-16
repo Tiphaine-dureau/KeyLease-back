@@ -13,7 +13,11 @@ Nomenclature :
 
 ### Unreleased
 
+### [0.1.6] - 2023-04-16
+
 #### Added
+
+- Added RentReceipt pdf with itext7
 
 ### [0.1.5] - 2023-04-14
 
