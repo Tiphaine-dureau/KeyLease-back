@@ -17,3 +17,8 @@ Utilisation de docker :
 ``docker run -dp 8080:8080 key-lease``
 
 Lance le profil en mode prod (vérifier sur docker)
+
+## Swagger
+
+- Swagger OpenAPI definition : http://localhost:8080/api/swagger-ui/index.html
+- Swagger api-docs : http://localhost:8080/api/v3/api-docs 
