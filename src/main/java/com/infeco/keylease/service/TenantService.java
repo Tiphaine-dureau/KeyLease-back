@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class TenantService {
-
     private final TenantRepository tenantRepository;
     private final AddressRepository addressRepository;
     private final LeaseContractRepository leaseContractRepository;
@@ -111,12 +110,23 @@ public class TenantService {
     private void setBalance(Tenant tenant, TenantEntity tenantEntity) {
         List<LeaseContractEntity> leaseContractEntityList = this.leaseContractRepository.getAllByTenantId(tenantEntity.getId());
         BigDecimal balance = BigDecimal.ZERO;
+        BigDecimal expectedRentAmount = BigDecimal.ZERO;
         for (LeaseContractEntity leaseContractEntity : leaseContractEntityList) {
             List<PaymentEntity> paymentEntityList = new ArrayList<>(leaseContractEntity.getPayments());
+            expectedRentAmount = expectedRentAmount.add(expectedRentAmount(leaseContractEntity));
             for (PaymentEntity paymentEntity : paymentEntityList) {
                 balance = balance.add(paymentEntity.getPaidRent());
             }
         }
         tenant.setBalance(balance);
+        tenant.setExpectedRentAmount(expectedRentAmount);
+    }
+
+    private BigDecimal expectedRentAmount(LeaseContractEntity leaseContractEntity) {
+        BigDecimal expectedRentAmount = BigDecimal.ZERO;
+        if (leaseContractEntity.getPayments().size() > 0) {
+            expectedRentAmount = leaseContractEntity.getRentAmount().multiply(BigDecimal.valueOf(leaseContractEntity.getPayments().size()));
+        }
+        return expectedRentAmount;
     }
 }
