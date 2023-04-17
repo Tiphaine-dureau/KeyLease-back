@@ -13,6 +13,8 @@ Nomenclature :
 
 ### Unreleased
 
+- Added swagger
+
 ### [0.1.8] - 2023-04-17
 
 #### Updated
