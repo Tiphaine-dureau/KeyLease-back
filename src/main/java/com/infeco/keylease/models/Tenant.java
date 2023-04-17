@@ -3,6 +3,7 @@ package com.infeco.keylease.models;
 import com.infeco.keylease.entity.LeaseContractEntity;
 import com.infeco.keylease.entity.TenantEntity;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ public class Tenant extends Client {
     String partnerFirstName;
     String partnerPhoneNumber;
     Set<UUID> leaseContractIdList;
+    BigDecimal balance;
 
     public Tenant() {
     }
@@ -54,5 +56,13 @@ public class Tenant extends Client {
 
     public void setLeaseContractIdList(Set<UUID> leaseContractIdList) {
         this.leaseContractIdList = leaseContractIdList;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }
