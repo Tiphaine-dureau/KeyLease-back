@@ -13,11 +13,18 @@ Nomenclature :
 
 ### Unreleased
 
+### [0.1.8] - 2023-04-17
+
+#### Updated
+
+- Updated Tenant model to add balance and expectedRentAmount
+- Updated Tenant service to calculate the balance and expectedRentAmount
+
 ### [0.1.7] - 2023-04-16
 
 #### Fixed
 
--Fixed signature image is not read in prod ->  updated to simple text
+- Fixed signature image is not read in prod ->  updated to simple text
 
 ### [0.1.6] - 2023-04-16
 
