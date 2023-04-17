@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface LeaseContractRepository extends JpaRepository<LeaseContractEntity, UUID> {
     List<LeaseContractEntity> getAllByOwnerId(UUID id);
+
+    List<LeaseContractEntity> getAllByTenantId(UUID id);
 }

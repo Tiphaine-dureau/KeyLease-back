@@ -1,14 +1,19 @@
 package com.infeco.keylease.service;
 
 import com.infeco.keylease.entity.AddressEntity;
+import com.infeco.keylease.entity.LeaseContractEntity;
+import com.infeco.keylease.entity.PaymentEntity;
 import com.infeco.keylease.entity.TenantEntity;
 import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.AddressRepository;
+import com.infeco.keylease.repository.LeaseContractRepository;
 import com.infeco.keylease.repository.TenantRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,13 +21,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class TenantService {
-
     private final TenantRepository tenantRepository;
     private final AddressRepository addressRepository;
+    private final LeaseContractRepository leaseContractRepository;
 
-    public TenantService(TenantRepository tenantRepository, AddressRepository addressRepository) {
+    public TenantService(TenantRepository tenantRepository, AddressRepository addressRepository, LeaseContractRepository leaseContractRepository) {
         this.tenantRepository = tenantRepository;
         this.addressRepository = addressRepository;
+        this.leaseContractRepository = leaseContractRepository;
     }
 
     public List<Tenant> getTenants() {
@@ -90,6 +96,37 @@ public class TenantService {
     }
 
     private Tenant entityToTenant(TenantEntity tenantEntity) {
-        return new Tenant(tenantEntity);
+        Tenant tenant = new Tenant(tenantEntity);
+        setBalance(tenant, tenantEntity);
+        return tenant;
+    }
+
+    /**
+     * Calcule le montant des loyers payés
+     *
+     * @param tenant
+     * @param tenantEntity
+     */
+    private void setBalance(Tenant tenant, TenantEntity tenantEntity) {
+        List<LeaseContractEntity> leaseContractEntityList = this.leaseContractRepository.getAllByTenantId(tenantEntity.getId());
+        BigDecimal balance = BigDecimal.ZERO;
+        BigDecimal expectedRentAmount = BigDecimal.ZERO;
+        for (LeaseContractEntity leaseContractEntity : leaseContractEntityList) {
+            List<PaymentEntity> paymentEntityList = new ArrayList<>(leaseContractEntity.getPayments());
+            expectedRentAmount = expectedRentAmount.add(expectedRentAmount(leaseContractEntity));
+            for (PaymentEntity paymentEntity : paymentEntityList) {
+                balance = balance.add(paymentEntity.getPaidRent());
+            }
+        }
+        tenant.setBalance(balance);
+        tenant.setExpectedRentAmount(expectedRentAmount);
+    }
+
+    private BigDecimal expectedRentAmount(LeaseContractEntity leaseContractEntity) {
+        BigDecimal expectedRentAmount = BigDecimal.ZERO;
+        if (leaseContractEntity.getPayments().size() > 0) {
+            expectedRentAmount = leaseContractEntity.getRentAmount().multiply(BigDecimal.valueOf(leaseContractEntity.getPayments().size()));
+        }
+        return expectedRentAmount;
     }
 }
