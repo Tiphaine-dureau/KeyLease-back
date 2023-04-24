@@ -13,7 +13,15 @@ Nomenclature :
 
 ### Unreleased
 
+### [0.1.9] - 2023-04-24
+
+#### Added
+
 - Added swagger
+
+#### Updated
+
+- Updated Unit Tests
 
 ### [0.1.8] - 2023-04-17
 

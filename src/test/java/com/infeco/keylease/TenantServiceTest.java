@@ -6,6 +6,7 @@ import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.Address;
 import com.infeco.keylease.models.Tenant;
 import com.infeco.keylease.repository.AddressRepository;
+import com.infeco.keylease.repository.LeaseContractRepository;
 import com.infeco.keylease.repository.TenantRepository;
 import com.infeco.keylease.service.TenantService;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,8 @@ public class TenantServiceTest {
 
     @Mock
     private AddressRepository addressRepository;
+    @Mock
+    private LeaseContractRepository leaseContractRepository;
 
     @InjectMocks
     TenantService tenantService;

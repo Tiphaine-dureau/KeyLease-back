@@ -50,6 +50,10 @@ public class LeaseContractControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].rentAmount").value(BigDecimal.valueOf(1250, 00)))
+                .andExpect(jsonPath("$[0].rentCharges").value(BigDecimal.valueOf(50, 00)))
+                .andExpect(jsonPath("$[0].requiredDeposit").value(BigDecimal.valueOf(3000, 00)))
+                .andExpect(jsonPath("$[0].paidDeposit").value(BigDecimal.valueOf(3000, 00)))
+                .andExpect(jsonPath("$[0].expectedAmountFromCafToOwner").value(BigDecimal.valueOf(50, 00)))
                 .andExpect(jsonPath("$[0].owner.firstName", is(leaseContract.getOwner().getFirstName())))
                 .andExpect(jsonPath("$[0].owner.lastName", is(leaseContract.getOwner().getLastName())))
                 .andExpect(jsonPath("$[0].owner.phoneNumber", is(leaseContract.getOwner().getPhoneNumber())))
@@ -92,6 +96,10 @@ public class LeaseContractControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(leaseContract.getId().toString()))
                 .andExpect(jsonPath("$.rentAmount").value(leaseContract.getRentAmount()))
+                .andExpect(jsonPath("$.rentCharges").value(leaseContract.getRentCharges()))
+                .andExpect(jsonPath("$.requiredDeposit").value(leaseContract.getRequiredDeposit()))
+                .andExpect(jsonPath("$.paidDeposit").value(leaseContract.getPaidDeposit()))
+                .andExpect(jsonPath("$.expectedAmountFromCafToOwner").value(leaseContract.getExpectedAmountFromCafToOwner()))
                 .andExpect(jsonPath("$.owner.firstName").value(leaseContract.getOwner().getFirstName()))
                 .andExpect(jsonPath("$.owner.lastName").value(leaseContract.getOwner().getLastName()))
                 .andExpect(jsonPath("$.owner.phoneNumber").value(leaseContract.getOwner().getPhoneNumber()))
@@ -124,6 +132,12 @@ public class LeaseContractControllerTest {
     private LeaseContract createLeaseContract() {
         LeaseContract leaseContract = new LeaseContract();
         leaseContract.setRentAmount(BigDecimal.valueOf(1250, 00));
+        leaseContract.setRentCharges(BigDecimal.valueOf(50, 00));
+        leaseContract.setRequiredDeposit(BigDecimal.valueOf(3000, 00));
+        leaseContract.setPaidDeposit(BigDecimal.valueOf(3000, 00));
+        leaseContract.setExpectedAmountFromCafToOwner(BigDecimal.valueOf(50, 00));
+        leaseContract.setExpectedAmountFromCafToOwner(BigDecimal.valueOf(50, 00));
+
         Owner owner = new Owner();
         owner.setFirstName("OwnerFirstName");
         owner.setLastName("OwnerLastName");
