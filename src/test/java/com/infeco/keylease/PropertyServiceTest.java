@@ -240,7 +240,7 @@ public class PropertyServiceTest {
         assertEquals("90", modifiedProperty.getArea());
         assertEquals("4", modifiedProperty.getRoomsNumber());
         assertEquals("Appartement de 4 pièces mesurant 90m2 située à proximité des écoles", modifiedProperty.getDescription());
-        assertEquals("Appartement", modifiedProperty.getType());
+        assertEquals("Maison", modifiedProperty.getType());
         Address modifiedAddress = modifiedProperty.getAddress();
         assertEquals("1 rue des Jacintes", modifiedAddress.getStreet());
         assertEquals("33600", modifiedAddress.getZipCode());

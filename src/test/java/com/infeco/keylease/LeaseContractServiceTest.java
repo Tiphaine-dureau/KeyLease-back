@@ -2,7 +2,8 @@ package com.infeco.keylease;
 
 import com.infeco.keylease.entity.*;
 import com.infeco.keylease.exceptions.NotFoundEntity;
-import com.infeco.keylease.models.*;
+import com.infeco.keylease.models.LeaseContract;
+import com.infeco.keylease.models.PostLeaseContract;
 import com.infeco.keylease.repository.LeaseContractRepository;
 import com.infeco.keylease.repository.OwnerRepository;
 import com.infeco.keylease.repository.PropertyRepository;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.infeco.keylease.EntityUtil.createPropertyEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -34,18 +36,16 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ActiveProfiles("dev")
 public class LeaseContractServiceTest {
-
     @Mock
     private LeaseContractRepository leaseContractRepository;
-
-    @InjectMocks
-    private LeaseContractService leaseContractService;
     @Mock
     private TenantRepository tenantRepository;
     @Mock
     private OwnerRepository ownerRepository;
     @Mock
     private PropertyRepository propertyRepository;
+    @InjectMocks
+    private LeaseContractService leaseContractService;
 
     @Test
     public void testGetLeaseContracts() throws ParseException {
@@ -58,9 +58,13 @@ public class LeaseContractServiceTest {
         LeaseContractEntity firstContractEntity = leaseContractEntityList.get(0);
         LeaseContract firstExpectedContract = expectedLeaseContracts.get(0);
         assertEquals(leaseContractEntityList.size(), expectedLeaseContracts.size());
+
         assertEquals(firstContractEntity.getRentAmount(), firstExpectedContract.getRentAmount());
         assertEquals(firstContractEntity.getRentCharges(), firstExpectedContract.getRentCharges());
         assertEquals(firstContractEntity.getDateContractSignature(), firstExpectedContract.getDateContractSignature());
+        assertEquals(firstContractEntity.getRequiredDeposit(), firstExpectedContract.getRequiredDeposit());
+        assertEquals(firstContractEntity.getPaidDeposit(), firstExpectedContract.getPaidDeposit());
+        assertEquals(firstContractEntity.getExpectedAmountFromCafToOwner(), firstExpectedContract.getExpectedAmountFromCafToOwner());
 
         assertEquals(firstContractEntity.getOwner().getFirstName(), firstExpectedContract.getOwner().getFirstName());
         assertEquals(firstContractEntity.getOwner().getLastName(), firstExpectedContract.getOwner().getLastName());
@@ -109,6 +113,10 @@ public class LeaseContractServiceTest {
         assertEquals(leaseContractEntity.getDateContractSignature(), leaseContractById.getDateContractSignature());
         assertEquals(leaseContractEntity.getRentAmount(), leaseContractById.getRentAmount());
         assertEquals(leaseContractEntity.getRentCharges(), leaseContractById.getRentCharges());
+        assertEquals(leaseContractEntity.getRequiredDeposit(), leaseContractById.getRequiredDeposit());
+        assertEquals(leaseContractEntity.getPaidDeposit(), leaseContractById.getPaidDeposit());
+        assertEquals(leaseContractEntity.getExpectedAmountFromCafToOwner(), leaseContractById.getExpectedAmountFromCafToOwner());
+
         assertEquals(leaseContractEntity.getOwner().getFirstName(), leaseContractById.getOwner().getFirstName());
         assertEquals(leaseContractEntity.getOwner().getLastName(), leaseContractById.getOwner().getLastName());
         assertEquals(leaseContractEntity.getOwner().getPhoneNumber(), leaseContractById.getOwner().getPhoneNumber());
@@ -136,7 +144,6 @@ public class LeaseContractServiceTest {
         assertEquals(leaseContractEntity.getProperty().getAddress().getStreet(), leaseContractById.getProperty().getAddress().getStreet());
         assertEquals(leaseContractEntity.getProperty().getAddress().getZipCode(), leaseContractById.getProperty().getAddress().getZipCode());
         assertEquals(leaseContractEntity.getProperty().getAddress().getTown(), leaseContractById.getProperty().getAddress().getTown());
-
     }
 
     @Test
@@ -146,70 +153,43 @@ public class LeaseContractServiceTest {
         PropertyEntity propertyEntity = createPropertyEntity();
         LeaseContractEntity leaseContractEntity = createLeaseContractEntity();
         leaseContractEntity.getOwner().setId(ownerEntity.getId());
+        leaseContractEntity.getTenant().setId(tenantEntity.getId());
+        leaseContractEntity.getProperty().setId(propertyEntity.getId());
         PostLeaseContract postLeaseContract = new PostLeaseContract();
         postLeaseContract.setTenantId(tenantEntity.getId());
         postLeaseContract.setOwnerId(ownerEntity.getId());
         postLeaseContract.setPropertyId(propertyEntity.getId());
-        when(tenantRepository.findById(tenantEntity.getId())).thenReturn(Optional.of(tenantEntity));
+
+        when(tenantRepository.findById(postLeaseContract.getTenantId())).thenReturn(Optional.of(tenantEntity));
         when(ownerRepository.findById(postLeaseContract.getOwnerId())).thenReturn(Optional.of(ownerEntity));
         when(propertyRepository.findById(postLeaseContract.getPropertyId())).thenReturn(Optional.of(propertyEntity));
         when(leaseContractRepository.save(any(LeaseContractEntity.class))).thenReturn(leaseContractEntity);
+
         LeaseContract createdLeaseContract = leaseContractService.addLeaseContract(postLeaseContract);
+
         assertEquals(postLeaseContract.getOwnerId(), createdLeaseContract.getOwner().getId());
-        // TODO assert other properties
+        assertEquals(postLeaseContract.getTenantId(), createdLeaseContract.getTenant().getId());
+        assertEquals(postLeaseContract.getPropertyId(), createdLeaseContract.getProperty().getId());
+        assertEquals(leaseContractEntity.getRentAmount(), createdLeaseContract.getRentAmount());
+        assertEquals(leaseContractEntity.getRentCharges(), createdLeaseContract.getRentCharges());
+        assertEquals(leaseContractEntity.getDateContractSignature(), createdLeaseContract.getDateContractSignature());
+        assertEquals(leaseContractEntity.getRequiredDeposit(), createdLeaseContract.getRequiredDeposit());
+        assertEquals(leaseContractEntity.getPaidDeposit(), createdLeaseContract.getPaidDeposit());
     }
 
-    private static LeaseContract createLeaseContract() {
-        LeaseContract leaseContract = new LeaseContract();
-        leaseContract.setRentAmount(BigDecimal.valueOf(1250, 00));
-        Owner owner = new Owner();
-        owner.setFirstName("OwnerFirstName");
-        owner.setLastName("OwnerLastName");
-        owner.setPhoneNumber("012345678");
-        owner.setEmail("owner@example.com");
-        owner.setIban("FR76 0000 6545 6789 3456 345");
-        owner.setAddress(createAddress());
-        leaseContract.setOwner(owner);
-
-        Tenant tenant = new Tenant();
-        tenant.setFirstName("TenantFirstName");
-        tenant.setLastName("TenantLastName");
-        tenant.setPhoneNumber("0987654321");
-        tenant.setEmail("tenant@example.com");
-        tenant.setPartnerFirstName("PartnerFirstName");
-        tenant.setPartnerLastName("PartnerLastName");
-        tenant.setPartnerPhoneNumber("0567895656");
-        tenant.setAddress(createAddress());
-        leaseContract.setTenant(tenant);
-
-        Property property = new Property();
-        property.setArea("110");
-        property.setRoomsNumber("5");
-        property.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
-        property.setType("Maison");
-        property.setAddress(createAddress());
-        leaseContract.setProperty(property);
-
-        return leaseContract;
-    }
-
-    private static Address createAddress() {
-        Address address = new Address();
-        address.setStreet("1 rue des Lauriers");
-        address.setZipCode("75000");
-        address.setTown("Paris");
-
-        return address;
-    }
-
+    // METHODS
     private static LeaseContractEntity createLeaseContractEntity() throws ParseException {
         LeaseContractEntity leaseContractEntity = new LeaseContractEntity();
-        leaseContractEntity.setRentAmount(BigDecimal.valueOf(1250, 00));
         String dateString = "2023-09-26";
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = formatter.parse(dateString);
         leaseContractEntity.setDateContractSignature(date);
+        leaseContractEntity.setRentAmount(BigDecimal.valueOf(1250, 00));
         leaseContractEntity.setRentCharges(BigDecimal.valueOf(300, 00));
+        leaseContractEntity.setRequiredDeposit(BigDecimal.valueOf(3000, 00));
+        leaseContractEntity.setPaidDeposit(BigDecimal.valueOf(3000, 00));
+        leaseContractEntity.setExpectedAmountFromCafToOwner(BigDecimal.valueOf(50, 00));
+
         OwnerEntity ownerEntity = createOwnerEntity();
         leaseContractEntity.setOwner(ownerEntity);
 
@@ -255,19 +235,6 @@ public class LeaseContractServiceTest {
         ownerEntity.setIban("FR76 0000 6545 6789 3456 345");
         ownerEntity.setAddress(createAddressEntity());
         return ownerEntity;
-    }
-
-    private static PropertyEntity createPropertyEntity() {
-        PropertyEntity propertyEntity = new PropertyEntity();
-        propertyEntity.setId(UUID.randomUUID());
-        propertyEntity.setArea("110");
-        propertyEntity.setRoomsNumber("5");
-        propertyEntity.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
-        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
-        propertyTypeEntity.setName("Maison");
-        propertyEntity.setPropertyType(propertyTypeEntity);
-        propertyEntity.setAddress(createAddressEntity());
-        return propertyEntity;
     }
 }
 

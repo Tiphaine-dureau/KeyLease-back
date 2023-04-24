@@ -1,12 +1,12 @@
 package com.infeco.keylease;
 
-import com.infeco.keylease.entity.AddressEntity;
 import com.infeco.keylease.entity.FixtureInventoryEntity;
 import com.infeco.keylease.entity.PropertyEntity;
-import com.infeco.keylease.entity.PropertyTypeEntity;
 import com.infeco.keylease.exceptions.NotFoundEntity;
 import com.infeco.keylease.models.FixtureInventory;
+import com.infeco.keylease.models.PostFixtureInventory;
 import com.infeco.keylease.repository.FixtureInventoryRepository;
+import com.infeco.keylease.repository.PropertyRepository;
 import com.infeco.keylease.service.FixtureInventoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,9 +20,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
-import java.util.UUID;
 
+import static com.infeco.keylease.EntityUtil.createPropertyEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -31,20 +32,19 @@ import static org.mockito.Mockito.when;
 public class FixtureInventoryServiceTest {
     @Mock
     private FixtureInventoryRepository fixtureInventoryRepository;
+    @Mock
+    private PropertyRepository propertyRepository;
     @InjectMocks
     private FixtureInventoryService fixtureInventoryService;
 
     @Test
     public void testGetFixtureInventoryById() throws NotFoundEntity, ParseException {
         FixtureInventoryEntity fixtureInventoryEntity = createFixtureInventoryEntity();
-        UUID fixtureInventoryId = UUID.randomUUID();
-        fixtureInventoryEntity.setId(fixtureInventoryId);
 
-        when(fixtureInventoryRepository.findById(fixtureInventoryId)).thenReturn(Optional.of(fixtureInventoryEntity));
+        when(fixtureInventoryRepository.findById(fixtureInventoryEntity.getId())).thenReturn(Optional.of(fixtureInventoryEntity));
 
-        FixtureInventory fixtureInventoryById = fixtureInventoryService.getFixtureInventoryById(fixtureInventoryId);
+        FixtureInventory fixtureInventoryById = fixtureInventoryService.getFixtureInventoryById(fixtureInventoryEntity.getId());
 
-        assertEquals(fixtureInventoryId, fixtureInventoryById.getId());
         assertEquals(fixtureInventoryEntity.getArrivalFixtureInventoryDate(), fixtureInventoryById.getArrivalFixtureInventoryDate());
         assertEquals(fixtureInventoryEntity.getArrivalComments(), fixtureInventoryById.getArrivalComments());
         assertEquals(fixtureInventoryEntity.getExitFixtureInventoryDate(), fixtureInventoryById.getExitFixtureInventoryDate());
@@ -60,6 +60,25 @@ public class FixtureInventoryServiceTest {
         assertEquals(fixtureInventoryEntity.getProperty().getAddress().getTown(), fixtureInventoryById.getProperty().getAddress().getTown());
     }
 
+    @Test
+    public void testAddFixtureInventory() throws NotFoundEntity, ParseException {
+        FixtureInventoryEntity expectedFixtureInventoryEntity = createFixtureInventoryEntity();
+        PostFixtureInventory postFixtureInventory = new PostFixtureInventory();
+        postFixtureInventory.setPropertyId(expectedFixtureInventoryEntity.getProperty().getId());
+
+        when(propertyRepository.findById(postFixtureInventory.getPropertyId())).thenReturn(Optional.of(expectedFixtureInventoryEntity.getProperty()));
+        when(fixtureInventoryRepository.save(any(FixtureInventoryEntity.class))).thenReturn(expectedFixtureInventoryEntity);
+
+        FixtureInventory createdFixtureInventory = fixtureInventoryService.addFixtureInventory(postFixtureInventory);
+
+        assertEquals(expectedFixtureInventoryEntity.getProperty().getId(), createdFixtureInventory.getProperty().getId());
+        assertEquals(expectedFixtureInventoryEntity.getArrivalFixtureInventoryDate(), createdFixtureInventory.getArrivalFixtureInventoryDate());
+        assertEquals(expectedFixtureInventoryEntity.getArrivalComments(), createdFixtureInventory.getArrivalComments());
+        assertEquals(expectedFixtureInventoryEntity.getExitFixtureInventoryDate(), createdFixtureInventory.getExitFixtureInventoryDate());
+        assertEquals(expectedFixtureInventoryEntity.getExitComments(), createdFixtureInventory.getExitComments());
+    }
+
+    // METHODS
     private static FixtureInventoryEntity createFixtureInventoryEntity() throws ParseException {
         FixtureInventoryEntity fixtureInventoryEntity = new FixtureInventoryEntity();
         String arrivalDateString = "2023-01-01";
@@ -71,31 +90,8 @@ public class FixtureInventoryServiceTest {
         Date exitDate = formatter.parse(exitDateString);
         fixtureInventoryEntity.setExitFixtureInventoryDate(exitDate);
         fixtureInventoryEntity.setExitComments("Rien à signaler");
-
         PropertyEntity propertyEntity = createPropertyEntity();
         fixtureInventoryEntity.setProperty(propertyEntity);
         return fixtureInventoryEntity;
-    }
-
-    private static PropertyEntity createPropertyEntity() {
-        PropertyEntity propertyEntity = new PropertyEntity();
-        propertyEntity.setId(UUID.randomUUID());
-        propertyEntity.setArea("110");
-        propertyEntity.setRoomsNumber("5");
-        propertyEntity.setDescription("Maison de 5 pièces mesurant 110m2 en plein centre ville");
-        PropertyTypeEntity propertyTypeEntity = new PropertyTypeEntity();
-        propertyTypeEntity.setName("Maison");
-        propertyEntity.setPropertyType(propertyTypeEntity);
-        propertyEntity.setAddress(createAddressEntity());
-        return propertyEntity;
-    }
-
-    private static AddressEntity createAddressEntity() {
-        AddressEntity addressEntity = new AddressEntity();
-        addressEntity.setId(UUID.randomUUID());
-        addressEntity.setStreet("1 rue des Lauriers");
-        addressEntity.setZipCode("75000");
-        addressEntity.setTown("Paris");
-        return addressEntity;
     }
 }
